@@ -7,8 +7,8 @@ import controlP5.*;
 ControlP5 controlP5;
 PImage img;
 PeasyCam cam;
-int numSpheres = 3000; 
-float radius = 600; 
+int numSpheres = 3000;
+float radius = 600;
 PVector[] smallSpheres;
 ArrayList<PVector> newSpheres;
 float whiteSphereSpeed = 0.02;
@@ -42,6 +42,9 @@ CColor colorPrincipal;
 CColor colorHiroshima;
 CColor colorHidrogeno;
 CColor colorTSAR;
+
+Button botonHiroshima, botonHidrogeno, botonTSAR;
+
 void bombInfo() {
   controlP5 = new ControlP5(this);
 
@@ -92,31 +95,25 @@ void bombInfo() {
 
 
   // Botón Hiroshima
-  controlP5.addButton("Hiroshima")
+  botonHiroshima = controlP5.addButton("Hiroshima")
     .setValue(0)
     .setPosition(100, height - 100)
     .setSize(80, 50)
-    .setColor(colorPrincipal)
-    .getCaptionLabel()
-    .setFont(createFont("Georgia", 10));
+    .setColor(colorPrincipal);
 
   // Botón Hidrogeno
-  controlP5.addButton("Hidrogeno")
+  botonHidrogeno = controlP5.addButton("Hidrogeno")
     .setValue(0)
     .setPosition(200, height - 100)
     .setSize(80, 50)
-    .setColor(colorPrincipal)
-    .getCaptionLabel()
-    .setFont(createFont("Georgia", 10));
+    .setColor(colorPrincipal);
 
   // Botón TSAR
-  controlP5.addButton("TSAR")
+  botonTSAR = controlP5.addButton("TSAR")
     .setValue(0)
     .setPosition(300, height - 100)
     .setSize(80, 50)
-    .setColor(colorPrincipal)
-    .getCaptionLabel()
-    .setFont(createFont("Georgia", 10));
+    .setColor(colorPrincipal);
 
 
   controlP5.setAutoDraw(false);
@@ -138,8 +135,8 @@ void setup() {
   systems = new ArrayList();
   //gravity = new PVector(0,0.01,0);
 
-  rocket = new Particle(0, 480, 0,#D3DBE3);
-  launch = new PVector(0,0,0);
+  rocket = new Particle(0, 480, 0, #D3DBE3);
+  launch = new PVector(0, 0, 0);
 
   ArrayList<Integer> colors = new ArrayList();
   colors.add(#FFFFFF);
@@ -227,7 +224,7 @@ void draw() {
   //rotateY(frameCount * 0.01);
 
   c.draw();
-    
+
 
   if (keyPressed) {
     if (key == 'w') {
@@ -298,24 +295,24 @@ public void updatePeopleCount(int total, int dead, int hurt, int rad) {
 }
 
 public void Hiroshima() {
-  //println("Se ha seleccionado Hiroshima");
-  controlP5.getController("Hiroshima").setColor(colorHiroshima);
-  controlP5.getController("Hidrogeno").setColor(colorPrincipal);
-  controlP5.getController("TSAR").setColor(colorPrincipal);
+  println("Se ha seleccionado Hiroshima");
+  if (botonHiroshima != null) botonHiroshima.setColor(colorHiroshima);
+  if (botonHidrogeno != null) botonHidrogeno.setColor(colorPrincipal);
+  if (botonTSAR != null) botonTSAR.setColor(colorPrincipal);
 }
 
 public void Hidrogeno() {
-  //println("Se ha seleccionado Hidrogeno");
-  controlP5.getController("Hiroshima").setColor(colorPrincipal);
-  controlP5.getController("Hidrogeno").setColor(colorHidrogeno);
-  controlP5.getController("TSAR").setColor(colorPrincipal);
+  println("Se ha seleccionado Hidrogeno");
+  if (botonHiroshima != null) botonHiroshima.setColor(colorPrincipal);
+  if (botonHidrogeno != null) botonHidrogeno.setColor(colorHidrogeno);
+  if (botonTSAR != null) botonTSAR.setColor(colorPrincipal);
 }
 
 public void TSAR() {
-  //println("Se ha seleccionado TSAR");
-  controlP5.getController("Hiroshima").setColor(colorPrincipal);
-  controlP5.getController("Hidrogeno").setColor(colorPrincipal);
-  controlP5.getController("TSAR").setColor(colorTSAR);
+  println("Se ha seleccionado TSAR");
+  if (botonHiroshima != null) botonHiroshima.setColor(colorPrincipal);
+  if (botonHidrogeno != null) botonHidrogeno.setColor(colorPrincipal);
+  if (botonTSAR != null) botonTSAR.setColor(colorTSAR);
 }
 
 void keyPressed() {
@@ -327,7 +324,7 @@ void keyPressed() {
     float y = radius * sin(phi) * sin(theta);
     float z = radius * cos(phi);
     newSpheres.add(new PVector(x, y, z));
-   rocket = new Particle(x, y, z,#D3DBE3);
+    rocket = new Particle(x, y, z, #D3DBE3);
 
 
     PVector direction = new PVector(x, y, z).normalize(); // Normalize to get the direction
@@ -349,16 +346,16 @@ void exit() {
 }
 
 PVector randomPositionOnSphere(float radius) {
-    float u, theta, r, x, y, z;
-    
-   
-        u = random(-1, 1);
-        theta = random(TWO_PI);
-        r = radius * sqrt(1 - u * u);
+  float u, theta, r, x, y, z;
 
-        x = r * cos(theta);
-        y = r * sin(theta);
-        z = radius * u;
+
+  u = random(-1, 1);
+  theta = random(TWO_PI);
+  r = radius * sqrt(1 - u * u);
+
+  x = r * cos(theta);
+  y = r * sin(theta);
+  z = radius * u;
 
 
   return new PVector(x, y, z);
