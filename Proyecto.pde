@@ -120,8 +120,8 @@ void bombInfo() {
 }
 
 void setup() {
-  //size(800, 600, OPENGL);
-  fullScreen(OPENGL);
+  size(800, 600, OPENGL);
+  //fullScreen(OPENGL);
   g3 = (PGraphics3D)g;
   background(0);
   smallSpheres = new PVector[numSpheres];
@@ -264,8 +264,7 @@ void draw() {
     b.draw();
     Esfera f = new Esfera(pos.x, pos.y, pos.z, 20, #62F525, 5, null, 100);
     f.draw();
-    Esfera d = new Esfera(pos.x, pos.y, pos.z, 40, #2595F5, 5, null, 100);
-    d.draw();
+   
   }
 
   gui();
@@ -323,8 +322,12 @@ void keyPressed() {
     float x = radius * sin(phi) * cos(theta);
     float y = radius * sin(phi) * sin(theta);
     float z = radius * cos(phi);
+    
     newSpheres.add(new PVector(x, y, z));
+    
+    c.lookForAfectedPeople(new PVector(x, y, z),40);
     rocket = new Particle(x, y, z, #D3DBE3);
+    
 
 
     PVector direction = new PVector(x, y, z).normalize(); // Normalize to get the direction
