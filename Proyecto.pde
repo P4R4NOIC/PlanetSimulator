@@ -1,4 +1,4 @@
-// TODO: 1. Hacer la animacion de la explosion
+// TODO:
 // 2. mejorar el comportamiento de los agentes aleatorios que representan humanos
 // 3. poner edificios
 // 4. ver si se mejora el movimiento al rededor del globo
@@ -8,7 +8,7 @@ ControlP5 controlP5;
 PImage img;
 PeasyCam cam;
 int numSpheres = 3000;
-float radius = 600;
+float radius = 1200;
 PVector[] smallSpheres;
 ArrayList<PVector> newSpheres;
 float whiteSphereSpeed = 0.02;
@@ -126,7 +126,7 @@ void setup() {
   smallSpheres = new PVector[numSpheres];
   newSpheres = new ArrayList<PVector>();
 
-  String name = "tierra.jpg";
+  String name = "tierra2.jpg";
   img = loadImage(name);
 
   cam = new PeasyCam(this, 1500);
@@ -144,7 +144,7 @@ void setup() {
   colors.add(#FF6B4D);
   colors.add(#FF4E1C);
   colors.add(#F72525);
-  c = new Esfera(0, 0, 0, 600, #0C18EA, 20, img, 255);
+  c = new Esfera(0, 0, 0, radius, #0C18EA, 30, img, 255);
   C1 = new Cluster(0, 0, 0, 1000, 1.5, 1, colors, 5000, 6);
 
 
@@ -266,8 +266,8 @@ void triggerExplosion() {
   float z = radius * cos(phi);
 
   // Create a new explosion with specified parameters
-  Explosion explosion = new Explosion(x, y, z, 100, 200, 50); // Customize parameters
-  explosions.add(explosion); // Add the explosion to the list
+  Explosion explosion = new Explosion(x, y, z, 500, 600, 1, 50); // Customize parameters
+  explosions.add(explosion); // Add the explosion to the list 100 200
 }
 
 void keyPressed() {
