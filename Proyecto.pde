@@ -1,4 +1,4 @@
-// TODO: 1. Hacer la animacion de la explosion
+// TODO:
 // 2. mejorar el comportamiento de los agentes aleatorios que representan humanos
 // 3. poner edificios
 // 4. ver si se mejora el movimiento al rededor del globo
@@ -8,15 +8,14 @@ ControlP5 controlP5;
 PImage img;
 PeasyCam cam;
 int numSpheres = 3000;
-float radius = 600;
+float radius = 1200;
 PVector[] smallSpheres;
 ArrayList<PVector> newSpheres;
 float whiteSphereSpeed = 0.02;
 float theta = 0;
 float phi = HALF_PI;
 
-ArrayList<System> systems;
-Particle rocket;
+ArrayList<Explosion> explosions;
 PVector launch;
 PVector gravity;
 System principal;
@@ -127,15 +126,13 @@ void setup() {
   smallSpheres = new PVector[numSpheres];
   newSpheres = new ArrayList<PVector>();
 
-  String name = "tierra.jpg";
+  String name = "tierra2.jpg";
   img = loadImage(name);
 
   cam = new PeasyCam(this, 1500);
 
-  systems = new ArrayList();
-  //gravity = new PVector(0,0.01,0);
 
-  rocket = new Particle(0, 480, 0, #D3DBE3);
+
   launch = new PVector(0, 0, 0);
 
   ArrayList<Integer> colors = new ArrayList();
@@ -147,12 +144,13 @@ void setup() {
   colors.add(#FF6B4D);
   colors.add(#FF4E1C);
   colors.add(#F72525);
-  c = new Esfera(0, 0, 0, 600, #0C18EA, 20, img, 255);
+  c = new Esfera(0, 0, 0, radius, #0C18EA, 30, img, 255);
   C1 = new Cluster(0, 0, 0, 1000, 1.5, 1, colors, 5000, 6);
 
 
   c.generatePopulationClusters();
   bombInfo();
+  explosions = new ArrayList<Explosion>();
 }
 
 void draw() {
@@ -161,67 +159,14 @@ void draw() {
 
 
   C1.display();
-
-  rocket.applyForce(launch);
-  rocket.update();
-  rocket.display();
-  if (rocket.pos.y <= -6000) {
-    rocket.mass = 0;
-    rocket.acc = new PVector(0, 0, 0);
-    rocket.vel =  new PVector(0, 0, 0);
-
-    /* principal.pos.x = rocket.pos.x;
-     principal.pos.y = rocket.pos.y;
-     principal.pos.z = rocket.pos.z;
-     
-     secondary.pos.x = rocket.pos.x;
-     secondary.pos.y = rocket.pos.y;
-     secondary.pos.z = rocket.pos.z;
-     
-     for (System s : systems) {
-     
-     if(!updated || rocketCounter < 2){
-     s.update(rocket.pos.x,rocket.pos.y,rocket.pos.z);
-     updated = true;
-     rocketCounter++;
-     }
-     
-     s.addExplosion();
-     s.addGravity(gravity);
-     s.applyDrag(1);
-     
-     }¡ if(rocket.pos.y <= -300){
-     rocket.mass = 0;
-     rocket.acc = new PVector(0,0,0);
-     rocket.vel =  new PVector(0, 0, 0);
-     
-     principal.pos.x = rocket.pos.x;
-     principal.pos.y = rocket.pos.y;
-     principal.pos.z = rocket.pos.z;
-     
-     secondary.pos.x = rocket.pos.x;
-     secondary.pos.y = rocket.pos.y;
-     secondary.pos.z = rocket.pos.z;
-     
-     for (FireworkSystem s : systems) {
-     
-     if(!updated || rocketCounter < 2){
-     s.update(rocket.pos.x,rocket.pos.y,rocket.pos.z);
-     updated = true;
-     rocketCounter++;
-     }
-     
-     s.addExplosion();
-     s.addGravity(gravity);
-     s.applyDrag(1);
-     
-     }
-     }*/
+  
+  for (int i = explosions.size() - 1; i >= 0; i--) {
+    Explosion exp = explosions.get(i);
+    exp.draw(); // Call the draw method of Explosion
+    if (exp.isComplete()) {
+      explosions.remove(i); // Remove completed explosions
+    }
   }
-
-
-  //rotateZ(0.25);
-  //rotateY(frameCount * 0.01);
 
   c.draw();
 
@@ -314,6 +259,17 @@ public void TSAR() {
   if (botonTSAR != null) botonTSAR.setColor(colorTSAR);
 }
 
+void triggerExplosion() {
+  // Get the explosion position based on the white sphere position
+  float x = radius * sin(phi) * cos(theta);
+  float y = radius * sin(phi) * sin(theta);
+  float z = radius * cos(phi);
+
+  // Create a new explosion with specified parameters
+  Explosion explosion = new Explosion(x, y, z, 500, 600, 1, 50); // Customize parameters
+  explosions.add(explosion); // Add the explosion to the list 100 200
+}
+
 void keyPressed() {
   if (key == 'e') {
     int newCount = int(random(0, 100));  // Simulamos un número aleatorio
@@ -326,15 +282,8 @@ void keyPressed() {
     newSpheres.add(new PVector(x, y, z));
     
     c.lookForAfectedPeople(new PVector(x, y, z),40);
-    rocket = new Particle(x, y, z, #D3DBE3);
-    
-
-
-    PVector direction = new PVector(x, y, z).normalize(); // Normalize to get the direction
-    direction.mult(10000);
-    rocket.applyForce(direction);
-    rocket.update();
-    rocket.display();
+    //Temporal
+    triggerExplosion();
   }
   if (key == ESC) {  // Si se presiona la tecla ESC
     isRunning = false;  // Detener la simulación
