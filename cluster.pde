@@ -1,5 +1,4 @@
-//Tarea 0 Simulacion de Sistemas Naturales
-//Fernando Gross
+
 class Cluster {
   PVector center;
   float distDev;

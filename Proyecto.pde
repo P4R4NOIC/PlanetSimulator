@@ -1,7 +1,4 @@
-// TODO:
-// 2. mejorar el comportamiento de los agentes aleatorios que representan humanos
-// 3. poner edificios
-// 4. ver si se mejora el movimiento al rededor del globo
+
 import peasy.*;
 import controlP5.*;
 ControlP5 controlP5;
