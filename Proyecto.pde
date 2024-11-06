@@ -313,13 +313,17 @@ Explosion triggerExplosion() {
 
 void keyPressed() {
   if (key == 'e') {
-    long newCount = 4785060131L;  // Simulamos un número aleatorio
-    updatePeopleCount(newCount, 46109212, newCount, newCount);  // Actualizamos el label con el nuevo número
+
+    
 
     Explosion actualExp = triggerExplosion();
     c.lookForAfectedPeople(actualExp);
-    println(c.getDeadPeoplePerBomb());
-    println(c.getTotalDeadPeople());
+    
+    long deadPeoplePB = c.getDeadPeoplePerBomb();
+    long deadPeople = c.getTotalDeadPeople();
+    
+    
+    updatePeopleCount(deadPeoplePB, deadPeople, 0, 0); // Tot - Dead - Hurt - Rad
    
   }
  
