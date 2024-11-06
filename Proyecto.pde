@@ -218,7 +218,7 @@ void draw() {
   float y = radius * sin(phi) * sin(theta);
   float z = radius * cos(phi);
 
-  Esfera whiteSphere = new Esfera(x, y, z, 10, #FFFFFF, 10, null, 255);
+  Esfera whiteSphere = new Esfera(x, y, z, deadCircleRadius, #FFFFFF, 10, null, 255);
   whiteSphere.draw();
 
 
