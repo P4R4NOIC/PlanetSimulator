@@ -23,6 +23,9 @@ class Esfera {
   float[] OCEANIAX;
   float[] OCEANIAY;
   float[] OCEANIAZ;
+  long deadPeoplePerBomb;
+  long hurtPeoplePerbomb;
+  long irradietedPeoplePerBomb;
 
   Esfera(float x, float y, float z, float d, color c, int detail, PImage texture, int opacity) {
     pos = new PVector(x, y, z);
@@ -90,11 +93,31 @@ class Esfera {
   }
   
   void lookForAfectedPeople(Explosion actualExp){
+    deadPeoplePerBomb=0;
+    hurtPeoplePerbomb=0;
+    irradietedPeoplePerBomb=0;
     for(peopleComul peopleGroup : populationClusters){
-      if(itTouch(peopleGroup.pos, peopleGroup.diameter, actualExp.getDeadS().pos, actualExp.getDeadS().diameter))println("se tocan si funciona");
+      if(itTouch(peopleGroup.pos, peopleGroup.diameter, actualExp.getDeadS().pos, actualExp.getDeadS().diameter)){
+         peopleGroup.redZone();
+         deadPeoplePerBomb+=peopleGroup.getDeadPoblation();
+      }
+      else if(itTouch(peopleGroup.pos, peopleGroup.diameter, actualExp.getRadS().pos, actualExp.getRadS().diameter)){
+        
+        irradietedPeoplePerBomb+=peopleGroup.getPeopleRadiated();
+        
+      }
+      else if(itTouch(peopleGroup.pos, peopleGroup.diameter, actualExp.getHurtS().pos, actualExp.getHurtS().diameter)){
+        
+        hurtPeoplePerbomb+=peopleGroup.getHurtPoblation();
+        
+      }
+      
     }
   
   
+  }
+  long getDeadPeoplePerBomb(){
+   return this.deadPeoplePerBomb;
   }
 
   void draw() {
@@ -126,8 +149,18 @@ class Esfera {
 
   void drawPopulationClusters() {
     for (peopleComul cluster : populationClusters) {
-      cluster.draw();
+      if(!cluster.isDead()){
+        cluster.draw();
+      }
     }
+  }
+  
+  long getTotalDeadPeople() {
+    long tdPeople =0;
+    for (peopleComul cluster : populationClusters) {
+      tdPeople += cluster.getDeadPoblation();
+    }
+    return tdPeople;
   }
 
 

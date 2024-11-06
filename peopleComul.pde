@@ -21,12 +21,12 @@ randomizar con una semilla (gacha roberto) la el tamano y la cantidad de poblaci
     int detail;
     PShape globe;
     int opacity;
-    int poblationN;
-    int deadPoblation;
-    int hurtPoblation;
-    int peopleRadiated;
+    long poblationN;
+    long deadPoblation;
+    long hurtPoblation;
+    long peopleRadiated;
 
-    peopleComul(float x, float y, float z, float d, color c, int detail,int opacity,int poblationN) {
+    peopleComul(float x, float y, float z, float d, color c, int detail,int opacity,long poblationN) {
         pos = new PVector(x, y, z);
         diameter = d;
         this.c = c;
@@ -54,8 +54,8 @@ randomizar con una semilla (gacha roberto) la el tamano y la cantidad de poblaci
         pos.x = x;
         pos.y = y;
     }
-    void changePoblation(float percent){
-      int p = poblationN;
+    void changeHurtPoblation(float percent){
+      long p = poblationN;
       for(int i =0;i<p;i++){
          float liveProb = random(0,100);
          if(liveProb<percent){
@@ -66,17 +66,29 @@ randomizar con una semilla (gacha roberto) la el tamano y la cantidad de poblaci
       }
     }
     
-    int getPoblationN(){
+    void redZone(){
+      deadPoblation+=poblationN;
+      poblationN =0;
+    }
+    
+    boolean isDead(){
+      if(opacity<30 || poblationN<500){
+         return true; 
+      }
+      return false;
+    }
+    
+    long getPoblationN(){
         return this.poblationN;
     }
     
-    int getDeadPoblation(){
+    long getDeadPoblation(){
         return this.deadPoblation;
     }
-    int getHurtPoblation(){
+    long getHurtPoblation(){
         return this.hurtPoblation;
     }
-    int getPeopleRadiated(){
+    long getPeopleRadiated(){
         return this.peopleRadiated;
     }
  }

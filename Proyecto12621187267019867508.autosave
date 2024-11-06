@@ -218,7 +218,7 @@ void draw() {
   float y = radius * sin(phi) * sin(theta);
   float z = radius * cos(phi);
 
-  Esfera whiteSphere = new Esfera(x, y, z, deadCircleRadius, #FFFFFF, 10, null, 255);
+  Esfera whiteSphere = new Esfera(x, y, z, 5, #FFFFFF, 10, null, 255);
   whiteSphere.draw();
 
 
@@ -303,7 +303,6 @@ Explosion triggerExplosion() {
 
   Explosion explosion = new Explosion(x, y, z, 500, 600, explosionScale, shockwaveSize,a,b,f); // Customize parameters
   explosions.add(explosion); // Add the explosion to the list 100 200
-  
   return explosion;
 }
 
@@ -312,13 +311,19 @@ void keyPressed() {
     long newCount = 4785060131L;  // Simulamos un número aleatorio
     updatePeopleCount(newCount, 46109212, newCount, newCount);  // Actualizamos el label con el nuevo número
 
+    float x = radius * sin(phi) * cos(theta);
+    float y = radius * sin(phi) * sin(theta);
+    float z = radius * cos(phi);
+
     Explosion actualExp = triggerExplosion();
     c.lookForAfectedPeople(actualExp);
-    println(c.getDeadPeoplePerBomb());
-    println(c.getTotalDeadPeople());
+    //Temporal
    
   }
- 
+  if (key == ESC) {  // Si se presiona la tecla ESC
+    isRunning = false;  // Detener la simulación
+    exit();  // Llamar a la función exit
+  }
 }
 
 void exit() {
