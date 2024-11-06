@@ -169,15 +169,25 @@ void draw() {
 
 
   C1.display();
+  c.draw();
   for (int i = explosions.size() - 1; i >= 0; i--) {
     Explosion exp = explosions.get(i);
     exp.draw(); // Call the draw method of Explosion
-    if (exp.isComplete()) {
+    /*if (exp.isComplete()) {
       explosions.remove(i); // Remove completed explosions
+    }*/
+    
+  }
+  for (int i = explosions.size() - 1; i >= 0; i--){
+    Explosion exp = explosions.get(i);
+    if(exp.isComplete()){
+      exp.drawDead();
+      exp.drawRad();
+      exp.drawHurt();
     }
   }
 
-  c.draw();
+  
 
 
   if (keyPressed) {
@@ -276,14 +286,14 @@ public void TSAR() {
   hurtCircleRadius = 50;
 }
 
-void triggerExplosion() {
+Explosion triggerExplosion() {
   // Get the explosion position based on the white sphere position
   float x = radius * sin(phi) * cos(theta);
   float y = radius * sin(phi) * sin(theta);
   float z = radius * cos(phi);
 
 
-  Esfera a = new Esfera(x, y, z, deadCircleRadius, #F70000, 5, null, 255);
+  Esfera a = new Esfera(x, y, z, deadCircleRadius, #F70000, 5, null, 200);
 
   Esfera b = new Esfera(x, y, z, radCircleRadius, #EEF231, 5, null, 100);
 
@@ -293,6 +303,7 @@ void triggerExplosion() {
 
   Explosion explosion = new Explosion(x, y, z, 500, 600, explosionScale, shockwaveSize,a,b,f); // Customize parameters
   explosions.add(explosion); // Add the explosion to the list 100 200
+  return explosion;
 }
 
 void keyPressed() {
@@ -304,10 +315,10 @@ void keyPressed() {
     float y = radius * sin(phi) * sin(theta);
     float z = radius * cos(phi);
 
-
-    c.lookForAfectedPeople(new PVector(x, y, z), hurtCircleRadius);
+    Explosion actualExp = triggerExplosion();
+    c.lookForAfectedPeople(actualExp);
     //Temporal
-    triggerExplosion();
+   
   }
   if (key == ESC) {  // Si se presiona la tecla ESC
     isRunning = false;  // Detener la simulación

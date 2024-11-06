@@ -89,9 +89,9 @@ class Esfera {
     return distancia <= (radio1 + radio2);
   }
   
-  void lookForAfectedPeople(PVector centro2, float diametro2){
+  void lookForAfectedPeople(Explosion actualExp){
     for(peopleComul peopleGroup : populationClusters){
-      if(itTouch(peopleGroup.pos, peopleGroup.diameter, centro2, diametro2))println("se tocan si funciona");
+      if(itTouch(peopleGroup.pos, peopleGroup.diameter, actualExp.getDeadS().pos, actualExp.getDeadS().diameter))println("se tocan si funciona");
     }
   
   

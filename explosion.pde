@@ -83,10 +83,26 @@ class Explosion {
                     capParticles.remove(i);
                 }
             }
-        }
-        deadSphere.draw();
-        radSphere.draw();
-        hurtSphere.draw();
+        }   
+    }
+    void drawDead(){
+       deadSphere.draw();
+    }
+    void drawRad(){
+       radSphere.draw();
+    }
+    void drawHurt(){
+       hurtSphere.draw();
+    }
+    Esfera getDeadS(){
+      return this.deadSphere;
+    }
+    Esfera getRadS(){
+      return this.radSphere;
+    }
+    
+    Esfera getHurtS(){
+      return this.hurtSphere;
     }
 
     boolean isComplete() {
