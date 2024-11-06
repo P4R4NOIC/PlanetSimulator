@@ -10,7 +10,7 @@ PeasyCam cam;
 int numSpheres = 3000;
 float radius = 1200;
 PVector[] smallSpheres;
-ArrayList<PVector> newSpheres;
+ArrayList<Esfera> newSpheres;
 float whiteSphereSpeed = 0.02;
 float theta = 0;
 float phi = HALF_PI;
@@ -130,12 +130,15 @@ void setup() {
   g3 = (PGraphics3D)g;
   background(0);
   smallSpheres = new PVector[numSpheres];
-  newSpheres = new ArrayList<PVector>();
+  newSpheres = new ArrayList<Esfera>();
 
   String name = "tierra2.jpg";
   img = loadImage(name);
 
-  cam = new PeasyCam(this, 1500);
+  cam = new PeasyCam(this, 2000);
+
+  cam.setMinimumDistance(1500);    
+  cam.setMaximumDistance(2500);    
 
 
 
@@ -208,13 +211,8 @@ void draw() {
   Esfera whiteSphere = new Esfera(x, y, z, 10, #FFFFFF, 10, null, 255);
   whiteSphere.draw();
 
-  for (PVector pos : newSpheres) {
-    Esfera a = new Esfera(pos.x, pos.y, pos.z, deadCircleRadius, #F70000, 5, null, 255);
-    a.draw();
-    Esfera b = new Esfera(pos.x, pos.y, pos.z, radCircleRadius, #EEF231, 5, null, 100);
-    b.draw();
-    Esfera f = new Esfera(pos.x, pos.y, pos.z, hurtCircleRadius, #62F525, 5, null, 100);
-    f.draw();
+  for (Esfera e : newSpheres) {
+    e.draw();
   }
 
   gui();
@@ -299,7 +297,14 @@ void keyPressed() {
     float y = radius * sin(phi) * sin(theta);
     float z = radius * cos(phi);
 
-    newSpheres.add(new PVector(x, y, z));
+    Esfera a = new Esfera(x, y, z, deadCircleRadius, #F70000, 5, null, 255);
+    
+    Esfera b = new Esfera(x, y, z, radCircleRadius, #EEF231, 5, null, 100);
+    
+    Esfera f = new Esfera(x, y, z, hurtCircleRadius, #62F525, 5, null, 100);
+    newSpheres.add(a);
+    newSpheres.add(b);
+    newSpheres.add(f);
 
     c.lookForAfectedPeople(new PVector(x, y, z), hurtCircleRadius);
     //Temporal
