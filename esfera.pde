@@ -79,8 +79,8 @@ class Esfera {
   return arr; // Return the modified array
 }
   boolean itTouch(PVector centro1, float diametro1, PVector centro2, float diametro2) {
-    float radio1 = diametro1 / 2;
-    float radio2 = diametro2 / 2;
+    float radio1 = diametro1;
+    float radio2 = diametro2;
 
     // Calcula la distancia entre los centros de las dos esferas
     float distancia = PVector.dist(centro1, centro2);
@@ -88,9 +88,10 @@ class Esfera {
     // Verifica si la distancia es menor o igual a la suma de los radios
     return distancia <= (radio1 + radio2);
   }
+  
   void lookForAfectedPeople(PVector centro2, float diametro2){
     for(peopleComul peopleGroup : populationClusters){
-      if(itTouch(peopleGroup.pos,peopleGroup.diameter,centro2,diametro2))println("se tocan si funciona");
+      if(itTouch(peopleGroup.pos, peopleGroup.diameter, centro2, diametro2))println("se tocan si funciona");
     }
   
   

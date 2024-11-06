@@ -7,10 +7,16 @@ PeasyCam cam;
 int numSpheres = 3000;
 float radius = 1200;
 PVector[] smallSpheres;
-ArrayList<PVector> newSpheres;
+ArrayList<Esfera> newSpheres;
 float whiteSphereSpeed = 0.02;
 float theta = 0;
 float phi = HALF_PI;
+
+float explosionScale;
+float shockwaveSize;
+float deadCircleRadius;
+float radCircleRadius;
+float hurtCircleRadius;
 
 ArrayList<Explosion> explosions;
 PVector launch;
@@ -121,12 +127,15 @@ void setup() {
   g3 = (PGraphics3D)g;
   background(0);
   smallSpheres = new PVector[numSpheres];
-  newSpheres = new ArrayList<PVector>();
+  newSpheres = new ArrayList<Esfera>();
 
   String name = "tierra2.jpg";
   img = loadImage(name);
 
-  cam = new PeasyCam(this, 1500);
+  cam = new PeasyCam(this, 2000);
+
+  cam.setMinimumDistance(1500);    
+  cam.setMaximumDistance(2500);    
 
 
 
@@ -147,6 +156,7 @@ void setup() {
 
   c.generatePopulationClusters();
   bombInfo();
+  Hiroshima();
   explosions = new ArrayList<Explosion>();
 }
 
@@ -156,7 +166,6 @@ void draw() {
 
 
   C1.display();
-  
   for (int i = explosions.size() - 1; i >= 0; i--) {
     Explosion exp = explosions.get(i);
     exp.draw(); // Call the draw method of Explosion
@@ -199,14 +208,8 @@ void draw() {
   Esfera whiteSphere = new Esfera(x, y, z, 10, #FFFFFF, 10, null, 255);
   whiteSphere.draw();
 
-  for (PVector pos : newSpheres) {
-    Esfera a = new Esfera(pos.x, pos.y, pos.z, 5, #F70000, 5, null, 255);
-    a.draw();
-    Esfera b = new Esfera(pos.x, pos.y, pos.z, 10, #EEF231, 5, null, 100);
-    b.draw();
-    Esfera f = new Esfera(pos.x, pos.y, pos.z, 20, #62F525, 5, null, 100);
-    f.draw();
-   
+  for (Esfera e : newSpheres) {
+    e.draw();
   }
 
   gui();
@@ -224,7 +227,7 @@ void gui() {
   hint(ENABLE_DEPTH_TEST);
 }
 
-public void updatePeopleCount(int total, int dead, int hurt, int rad) {
+public void updatePeopleCount(long total, long dead, long hurt, long rad) {
   String newText = "Total de personas: " + total;
   totalPeople.setText(newText);
   newText = "Personas muertas: " + dead;
@@ -240,6 +243,11 @@ public void Hiroshima() {
   if (botonHiroshima != null) botonHiroshima.setColor(colorHiroshima);
   if (botonHidrogeno != null) botonHidrogeno.setColor(colorPrincipal);
   if (botonTSAR != null) botonTSAR.setColor(colorPrincipal);
+  explosionScale = 0.25;
+  shockwaveSize = 10;
+  deadCircleRadius = 2.5;
+  radCircleRadius = 5;
+  hurtCircleRadius = 10;
 }
 
 public void Hidrogeno() {
@@ -247,6 +255,11 @@ public void Hidrogeno() {
   if (botonHiroshima != null) botonHiroshima.setColor(colorPrincipal);
   if (botonHidrogeno != null) botonHidrogeno.setColor(colorHidrogeno);
   if (botonTSAR != null) botonTSAR.setColor(colorPrincipal);
+  explosionScale = 0.5;
+  shockwaveSize = 25;
+  deadCircleRadius = 4;
+  radCircleRadius = 10;
+  hurtCircleRadius = 20;
 }
 
 public void TSAR() {
@@ -254,6 +267,11 @@ public void TSAR() {
   if (botonHiroshima != null) botonHiroshima.setColor(colorPrincipal);
   if (botonHidrogeno != null) botonHidrogeno.setColor(colorPrincipal);
   if (botonTSAR != null) botonTSAR.setColor(colorTSAR);
+  explosionScale = 1;
+  shockwaveSize = 50;
+  deadCircleRadius = 10;
+  radCircleRadius = 20;
+  hurtCircleRadius = 50;
 }
 
 void triggerExplosion() {
@@ -263,22 +281,29 @@ void triggerExplosion() {
   float z = radius * cos(phi);
 
   // Create a new explosion with specified parameters
-  Explosion explosion = new Explosion(x, y, z, 500, 600, 1, 50); // Customize parameters
+  Explosion explosion = new Explosion(x, y, z, 500, 600, explosionScale, shockwaveSize); // Customize parameters
   explosions.add(explosion); // Add the explosion to the list 100 200
 }
 
 void keyPressed() {
   if (key == 'e') {
-    int newCount = int(random(0, 100));  // Simulamos un número aleatorio
-    updatePeopleCount(newCount, newCount, newCount, newCount);  // Actualizamos el label con el nuevo número
+    long newCount = 4785060131L;  // Simulamos un número aleatorio
+    updatePeopleCount(newCount, 46109212, newCount, newCount);  // Actualizamos el label con el nuevo número
 
     float x = radius * sin(phi) * cos(theta);
     float y = radius * sin(phi) * sin(theta);
     float z = radius * cos(phi);
+
+    Esfera a = new Esfera(x, y, z, deadCircleRadius, #F70000, 5, null, 255);
     
-    newSpheres.add(new PVector(x, y, z));
+    Esfera b = new Esfera(x, y, z, radCircleRadius, #EEF231, 5, null, 100);
     
-    c.lookForAfectedPeople(new PVector(x, y, z),40);
+    Esfera f = new Esfera(x, y, z, hurtCircleRadius, #62F525, 5, null, 100);
+    newSpheres.add(a);
+    newSpheres.add(b);
+    newSpheres.add(f);
+
+    c.lookForAfectedPeople(new PVector(x, y, z), hurtCircleRadius);
     //Temporal
     triggerExplosion();
   }
