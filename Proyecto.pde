@@ -18,6 +18,7 @@ float shockwaveSize;
 float deadCircleRadius;
 float radCircleRadius;
 float hurtCircleRadius;
+int bombType;
 
 ArrayList<Explosion> explosions;
 PVector launch;
@@ -260,6 +261,7 @@ public void Hiroshima() {
   deadCircleRadius = 2.5;
   radCircleRadius = 5;
   hurtCircleRadius = 10;
+  bombType = 1;
 }
 
 public void Hidrogeno() {
@@ -272,6 +274,7 @@ public void Hidrogeno() {
   deadCircleRadius = 4;
   radCircleRadius = 10;
   hurtCircleRadius = 20;
+  bombType = 2;
 }
 
 public void TSAR() {
@@ -284,6 +287,7 @@ public void TSAR() {
   deadCircleRadius = 10;
   radCircleRadius = 20;
   hurtCircleRadius = 50;
+  bombType = 3;
 }
 
 Explosion triggerExplosion() {
@@ -301,7 +305,7 @@ Explosion triggerExplosion() {
   
   // Create a new explosion with specified parameters
 
-  Explosion explosion = new Explosion(x, y, z, 500, 600, explosionScale, shockwaveSize,a,b,f); // Customize parameters
+  Explosion explosion = new Explosion(x, y, z, 500, 600, explosionScale, shockwaveSize,a,b,f,bombType); // Customize parameters
   explosions.add(explosion); // Add the explosion to the list 100 200
   
   return explosion;

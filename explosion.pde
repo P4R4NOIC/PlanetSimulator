@@ -7,11 +7,12 @@ class Explosion {
     Esfera deadSphere;
     Esfera radSphere;
     Esfera hurtSphere;
+    int bombType;
     boolean isAnimating; // State variable to control animation state
     float explosionScale; // Parameter to control the scale of the explosion
     float shockwaveSize; // Parameter to control the size of the shockwave
 
-    Explosion(float x, float y, float z, int columnCount, int capCount, float explosionScale, float shockwaveSize, Esfera deadSphere, Esfera radSphere, Esfera hurtSphere) {
+    Explosion(float x, float y, float z, int columnCount, int capCount, float explosionScale, float shockwaveSize, Esfera deadSphere, Esfera radSphere, Esfera hurtSphere, int bombType) {
         pos = new PVector(x, y, z);
         upDirection = pos.copy().normalize();
         columnParticles = new ArrayList<Particle>();
@@ -23,6 +24,7 @@ class Explosion {
         this.deadSphere = deadSphere;
         this.radSphere = radSphere;
         this.hurtSphere = hurtSphere;
+        this.bombType = bombType;
 
         // Initialize particles for the rising column
         for (int i = 0; i < columnCount; i++) {
