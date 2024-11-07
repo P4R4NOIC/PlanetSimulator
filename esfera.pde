@@ -23,6 +23,9 @@ class Esfera {
   float[] OCEANIAX;
   float[] OCEANIAY;
   float[] OCEANIAZ;
+  long deadPeoplePerBomb;
+  long hurtPeoplePerbomb;
+  long irradietedPeoplePerBomb;
 
   Esfera(float x, float y, float z, float d, color c, int detail, PImage texture, int opacity) {
     pos = new PVector(x, y, z);
@@ -79,8 +82,8 @@ class Esfera {
   return arr; // Return the modified array
 }
   boolean itTouch(PVector centro1, float diametro1, PVector centro2, float diametro2) {
-    float radio1 = diametro1 / 2;
-    float radio2 = diametro2 / 2;
+    float radio1 = diametro1;
+    float radio2 = diametro2;
 
     // Calcula la distancia entre los centros de las dos esferas
     float distancia = PVector.dist(centro1, centro2);
@@ -88,12 +91,79 @@ class Esfera {
     // Verifica si la distancia es menor o igual a la suma de los radios
     return distancia <= (radio1 + radio2);
   }
-  void lookForAfectedPeople(PVector centro2, float diametro2){
-    for(peopleComul peopleGroup : populationClusters){
-      if(itTouch(peopleGroup.pos,peopleGroup.diameter,centro2,diametro2))println("se tocan si funciona");
+  
+ void lookForAfectedPeople(Explosion actualExp) {
+    deadPeoplePerBomb = 0;
+    hurtPeoplePerbomb = 0;
+    irradietedPeoplePerBomb = 0;
+    
+    for (peopleComul peopleGroup : populationClusters) {
+        // Calculate 3D distance to explosion center
+        float distanceToExplosion = dist(
+            peopleGroup.pos.x, peopleGroup.pos.y, peopleGroup.pos.z,
+            actualExp.pos.x, actualExp.pos.y, actualExp.pos.z
+        );
+
+        // Dead Zone
+        if (distanceToExplosion <= actualExp.getDeadS().diameter ) {
+            peopleGroup.redZone();
+            deadPeoplePerBomb += peopleGroup.getDeadPoblation();
+        }
+        
+        // Radiation Zone
+        else if (distanceToExplosion <= actualExp.getRadS().diameter ) {
+            float distanceEffect = distanceEffect(distanceToExplosion, actualExp.getRadS().diameter );
+            
+            if (actualExp.bombType == 1) {  // Hiroshima
+                peopleGroup.changeHurtPoblation(60 * distanceEffect);
+                peopleGroup.changeDeadPoblation(55 * distanceEffect);
+                peopleGroup.changeIrraditedPoblation(60 * distanceEffect);
+            } else if (actualExp.bombType == 2) {  // Hydrogen
+                peopleGroup.changeHurtPoblation(60 * distanceEffect);
+                peopleGroup.changeDeadPoblation(45 * distanceEffect);
+                peopleGroup.changeIrraditedPoblation(60 * distanceEffect);
+            } else if (actualExp.bombType == 3) {  // Tsar
+                peopleGroup.changeHurtPoblation(70 * distanceEffect);
+                peopleGroup.changeDeadPoblation(60 * distanceEffect);
+                peopleGroup.changeIrraditedPoblation(60 * distanceEffect);
+            }
+            
+            hurtPeoplePerbomb += peopleGroup.getHurtPoblation();
+            deadPeoplePerBomb += peopleGroup.getDeadPoblation();
+            irradietedPeoplePerBomb += peopleGroup.getPeopleRadiated();
+        }
+        
+        // Hurt Zone
+        else if (distanceToExplosion <= actualExp.getHurtS().diameter ) {
+            float distanceEffect = distanceEffect(distanceToExplosion, actualExp.getHurtS().diameter );
+
+            if (actualExp.bombType == 1) {  // Hiroshima
+                peopleGroup.changeHurtPoblation(50 * distanceEffect);
+                peopleGroup.changeDeadPoblation(40 * distanceEffect);
+            } else if (actualExp.bombType == 2) {  // Hydrogen
+                peopleGroup.changeHurtPoblation(35 * distanceEffect);
+                peopleGroup.changeDeadPoblation(25 * distanceEffect);
+            } else if (actualExp.bombType == 3) {  // Tsar
+                peopleGroup.changeHurtPoblation(40 * distanceEffect);
+                peopleGroup.changeDeadPoblation(30 * distanceEffect);
+            }
+            
+            hurtPeoplePerbomb += peopleGroup.getHurtPoblation();
+            deadPeoplePerBomb += peopleGroup.getDeadPoblation();
+        }
     }
-  
-  
+}
+float distanceEffect(float distance, float maxRadius) {
+    return 1 - (distance / maxRadius);  // Higher effect (1) when close, lower (0) when far
+}
+  long getDeadPeoplePerBomb(){
+   return this.deadPeoplePerBomb;
+  }
+  long getHurtPeoplePerBomb(){
+   return this.hurtPeoplePerbomb;
+  }
+  long getIrraditedPeoplePerBomb(){
+   return this.irradietedPeoplePerBomb;
   }
 
   void draw() {
@@ -125,8 +195,49 @@ class Esfera {
 
   void drawPopulationClusters() {
     for (peopleComul cluster : populationClusters) {
-      cluster.draw();
+      if(!cluster.isDead()){
+        cluster.draw();
+      }
     }
+  }
+  
+  long getTotalDeadPeople() {
+    long tdPeople =0;
+    for (peopleComul cluster : populationClusters) {
+      tdPeople += cluster.getDeadPoblation();
+    }
+    return tdPeople;
+  }
+  
+  long getTotalAlivePeople() {
+    long AlivePeople =0;
+    for (peopleComul cluster : populationClusters) {
+      if(!cluster.isDead()){
+        AlivePeople += cluster.getPoblationN();
+      }
+
+    }
+    return AlivePeople;
+  }
+  long getTotalHurtPoblation() {
+    long hurtPeople =0;
+    for (peopleComul cluster : populationClusters) {
+      if(!cluster.isDead()){
+        hurtPeople += cluster.getHurtPoblation();
+      }
+
+    }
+    return hurtPeople;
+  }
+  long getTotalRadiatedPoblation() {
+    long IrradiatedPeople =0;
+    for (peopleComul cluster : populationClusters) {
+      if(!cluster.isDead()){
+        IrradiatedPeople += cluster.getPeopleRadiated();
+      }
+
+    }
+    return IrradiatedPeople;
   }
 
 
@@ -145,19 +256,19 @@ class Esfera {
 
 
     for (int i =0; i<americaX.length; i++) {
-      peopleComul cluster = new peopleComul(americaX[i], americaY[i], americaZ[i], 10, #ff0000, 10, 255, 1000);
+      peopleComul cluster = new peopleComul(americaX[i], americaY[i], americaZ[i], 10, #ff0000, 10, 255, 1000000);
       populationClusters.add(cluster);
     }
 
 
     for (int i =0; i<EUX.length; i++) {
-      peopleComul cluster = new peopleComul(EUX[i], EUY[i], EUZ[i], 10, #1e88e5, 10, 255, 1000);
+      peopleComul cluster = new peopleComul(EUX[i], EUY[i], EUZ[i], 10, #1e88e5, 10, 255, 1000000);
       populationClusters.add(cluster);
     }
 
 
     for (int i =0; i<AFRICAX.length; i++) {
-      peopleComul cluster = new peopleComul(AFRICAX[i], AFRICAY[i], AFRICAZ[i], 10, #5e35b1, 10, 255, 1000);
+      peopleComul cluster = new peopleComul(AFRICAX[i], AFRICAY[i], AFRICAZ[i], 10, #5e35b1, 10, 255, 1000000);
       populationClusters.add(cluster);
     }
 
@@ -165,17 +276,17 @@ class Esfera {
     int indianCounter = 50;
     for (int i =0; i<ASIAX.length; i++) {
       if (indianCounter>0) {
-        peopleComul cluster = new peopleComul(ASIAX[i], ASIAY[i], ASIAZ[i], 10, #f4d03f, 10, 255, 1000);
+        peopleComul cluster = new peopleComul(ASIAX[i], ASIAY[i], ASIAZ[i], 10, #f4d03f, 10, 255, 1000000);
         populationClusters.add(cluster);
         indianCounter--;
       }
-      peopleComul cluster = new peopleComul(ASIAX[i], ASIAY[i], ASIAZ[i], 5, #f4d03f, 10, 255, 1000);
+      peopleComul cluster = new peopleComul(ASIAX[i], ASIAY[i], ASIAZ[i], 5, #f4d03f, 10, 255, 1000000);
       populationClusters.add(cluster);
     }
 
 
     for (int i =0; i<OCEANIAX.length; i++) {
-      peopleComul cluster = new peopleComul(OCEANIAX[i], OCEANIAY[i], OCEANIAZ[i], 10, #82e0aa, 10, 255, 1000);
+      peopleComul cluster = new peopleComul(OCEANIAX[i], OCEANIAY[i], OCEANIAZ[i], 10, #82e0aa, 10, 255, 1000000);
       populationClusters.add(cluster);
     }
   }

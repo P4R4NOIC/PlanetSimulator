@@ -4,11 +4,15 @@ class Explosion {
     ArrayList<Particle> columnParticles;
     ArrayList<Particle> capParticles;
     ArrayList<Shockwave> shockwaves;
+    Esfera deadSphere;
+    Esfera radSphere;
+    Esfera hurtSphere;
+    int bombType;
     boolean isAnimating; // State variable to control animation state
     float explosionScale; // Parameter to control the scale of the explosion
     float shockwaveSize; // Parameter to control the size of the shockwave
 
-    Explosion(float x, float y, float z, int columnCount, int capCount, float explosionScale, float shockwaveSize) {
+    Explosion(float x, float y, float z, int columnCount, int capCount, float explosionScale, float shockwaveSize, Esfera deadSphere, Esfera radSphere, Esfera hurtSphere, int bombType) {
         pos = new PVector(x, y, z);
         upDirection = pos.copy().normalize();
         columnParticles = new ArrayList<Particle>();
@@ -17,6 +21,10 @@ class Explosion {
         isAnimating = false; // Initially not animating
         this.explosionScale = explosionScale; // Store the explosion scale
         this.shockwaveSize = shockwaveSize; // Store the shockwave size
+        this.deadSphere = deadSphere;
+        this.radSphere = radSphere;
+        this.hurtSphere = hurtSphere;
+        this.bombType = bombType;
 
         // Initialize particles for the rising column
         for (int i = 0; i < columnCount; i++) {
@@ -77,7 +85,26 @@ class Explosion {
                     capParticles.remove(i);
                 }
             }
-        }
+        }   
+    }
+    void drawDead(){
+       deadSphere.draw();
+    }
+    void drawRad(){
+       radSphere.draw();
+    }
+    void drawHurt(){
+       hurtSphere.draw();
+    }
+    Esfera getDeadS(){
+      return this.deadSphere;
+    }
+    Esfera getRadS(){
+      return this.radSphere;
+    }
+    
+    Esfera getHurtS(){
+      return this.hurtSphere;
     }
 
     boolean isComplete() {

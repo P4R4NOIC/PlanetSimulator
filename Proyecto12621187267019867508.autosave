@@ -18,7 +18,6 @@ float shockwaveSize;
 float deadCircleRadius;
 float radCircleRadius;
 float hurtCircleRadius;
-int bombType;
 
 ArrayList<Explosion> explosions;
 PVector launch;
@@ -39,14 +38,9 @@ PMatrix3D currCameraMatrix;
 PGraphics3D g3;
 
 Textlabel totalPeople;
-Textlabel totalDeadPeople;
-Textlabel totalRadiatedPeople;
-Textlabel totalHurtPeople;
-
-Textlabel deadPeoplePerBomb;
-Textlabel radPeoplePerBomb;
-Textlabel hurtPeoplePerBomb;
-
+Textlabel deadPeople;
+Textlabel radiatedPeople;
+Textlabel hurtPeople;
 CColor colorPrincipal;
 CColor colorHiroshima;
 CColor colorHidrogeno;
@@ -57,57 +51,35 @@ Button botonHiroshima, botonHidrogeno, botonTSAR;
 void bombInfo() {
   controlP5 = new ControlP5(this);
 
-  // Labels principales
   totalPeople = controlP5.addTextlabel("totalPeopleLabel")
-    .setText("Total de personas: 0")
+    .setText("Total de personas: 1.000.000")
     .setPosition(10, 10)
     .setColorValue(#444444)
     .setFont(createFont("Georgia", 40))
     .setSize(200, 40);
 
-  totalDeadPeople = controlP5.addTextlabel("totalDeadPeople")
-    .setText("Total de personas muertas: 0")
+
+  deadPeople = controlP5.addTextlabel("deadPeopleLabel")
+    .setText("Personas muertas: 0")
     .setPosition(10, 50)
     .setColorValue(#FF0313)
     .setFont(createFont("Georgia", 40))
     .setSize(200, 40);
 
-  totalRadiatedPeople = controlP5.addTextlabel("totalRadiatedPeopleLabel")
-    .setText("Total de personas irradiadas: 0")
+  radiatedPeople = controlP5.addTextlabel("radiatedPeopleLabel")
+    .setText("Personas irradiadas: 0")
     .setPosition(10, 90)
     .setColorValue(#39FF14)
     .setFont(createFont("Georgia", 40))
     .setSize(200, 40);
 
-  totalHurtPeople = controlP5.addTextlabel("totalHurtPeopleLabel")
-    .setText("Total de personas heridas: 0")
+
+  hurtPeople = controlP5.addTextlabel("hurtPeopleLabel")
+    .setText("Personas heridas: 0")
     .setPosition(10, 130)
     .setColorValue(#FFD700)
     .setFont(createFont("Georgia", 40))
     .setSize(200, 40);
-
-  // Labels secundarios
-  deadPeoplePerBomb = controlP5.addTextlabel("deadPeoplePerBombLabel")
-    .setText("Personas muertas por la bomba individual: 0")
-    .setPosition(10, 180)
-    .setColorValue(#B22222)
-    .setFont(createFont("Georgia", 27))
-    .setSize(300, 30);
-
-  radPeoplePerBomb = controlP5.addTextlabel("radPeoplePerBombLabel")
-    .setText("Personas irradiadas por la bomba individual: 0")
-    .setPosition(10, 220)
-    .setColorValue(#3CB371)
-    .setFont(createFont("Georgia", 27))
-    .setSize(300, 30);
-
-  hurtPeoplePerBomb = controlP5.addTextlabel("hurtPeoplePerBombLabel")
-    .setText("Personas heridas por la bomba individual: 0")
-    .setPosition(10, 260)
-    .setColorValue(#DAA520)
-    .setFont(createFont("Georgia", 27))
-    .setSize(300, 30);
-
 
   controlP5.addTextlabel("selectBomb")
     .setText("Seleccionar bomba:")
@@ -151,8 +123,8 @@ void bombInfo() {
 }
 
 void setup() {
-  //size(800, 600, OPENGL);
-  fullScreen(OPENGL);
+  size(800, 600, OPENGL);
+  //fullScreen(OPENGL);
   g3 = (PGraphics3D)g;
   background(0);
   smallSpheres = new PVector[numSpheres];
@@ -202,19 +174,20 @@ void draw() {
     Explosion exp = explosions.get(i);
     exp.draw(); // Call the draw method of Explosion
     /*if (exp.isComplete()) {
-     explosions.remove(i); // Remove completed explosions
-     }*/
+      explosions.remove(i); // Remove completed explosions
+    }*/
+    
   }
-  for (int i = explosions.size() - 1; i >= 0; i--) {
+  for (int i = explosions.size() - 1; i >= 0; i--){
     Explosion exp = explosions.get(i);
-    if (exp.isComplete()) {
+    if(exp.isComplete()){
       exp.drawDead();
       exp.drawRad();
       exp.drawHurt();
     }
   }
 
-
+  
 
 
   if (keyPressed) {
@@ -245,7 +218,7 @@ void draw() {
   float y = radius * sin(phi) * sin(theta);
   float z = radius * cos(phi);
 
-  Esfera whiteSphere = new Esfera(x, y, z, deadCircleRadius, #FFFFFF, 10, null, 255);
+  Esfera whiteSphere = new Esfera(x, y, z, 5, #FFFFFF, 10, null, 255);
   whiteSphere.draw();
 
 
@@ -266,25 +239,15 @@ void gui() {
   hint(ENABLE_DEPTH_TEST);
 }
 
-public void updatePeopleCount(long total, long dead, long hurt, long rad, long deadPB, long radPB, long hurtPB) {
+public void updatePeopleCount(long total, long dead, long hurt, long rad) {
   String newText = "Total de personas: " + total;
   totalPeople.setText(newText);
-
-  newText = "Total de personas muertas: " + dead;
-  totalDeadPeople.setText(newText);
-
-  newText = "Total de personas irradiadas: " + rad;
-  totalRadiatedPeople.setText(newText);
-
-  newText = "Total de personas heridas: " + hurt;
-  totalHurtPeople.setText(newText);
-
-  newText = "Personas muertas por la bomba individual: " + deadPB;
-  deadPeoplePerBomb.setText(newText);
-  newText = "Personas irradiadas por la bomba individual: " + radPB;
-  radPeoplePerBomb.setText(newText);
-  newText = "Personas heridas por la bomba individual: " + hurtPB;
-  hurtPeoplePerBomb.setText(newText);
+  newText = "Personas muertas: " + dead;
+  deadPeople.setText(newText);
+  newText = "Personas irradiadas: " + rad;
+  radiatedPeople.setText(newText);
+  newText = "Personas heridas: " + hurt;
+  hurtPeople.setText(newText);
 }
 
 public void Hiroshima() {
@@ -295,9 +258,8 @@ public void Hiroshima() {
   explosionScale = 0.25;
   shockwaveSize = 10;
   deadCircleRadius = 2.5;
-  radCircleRadius = 6;
+  radCircleRadius = 5;
   hurtCircleRadius = 10;
-  bombType = 1;
 }
 
 public void Hidrogeno() {
@@ -308,9 +270,8 @@ public void Hidrogeno() {
   explosionScale = 0.5;
   shockwaveSize = 25;
   deadCircleRadius = 4;
-  radCircleRadius = 13;
+  radCircleRadius = 10;
   hurtCircleRadius = 20;
-  bombType = 2;
 }
 
 public void TSAR() {
@@ -321,9 +282,8 @@ public void TSAR() {
   explosionScale = 1;
   shockwaveSize = 50;
   deadCircleRadius = 10;
-  radCircleRadius = 30;
+  radCircleRadius = 20;
   hurtCircleRadius = 50;
-  bombType = 3;
 }
 
 Explosion triggerExplosion() {
@@ -338,36 +298,31 @@ Explosion triggerExplosion() {
   Esfera b = new Esfera(x, y, z, radCircleRadius, #EEF231, 5, null, 100);
 
   Esfera f = new Esfera(x, y, z, hurtCircleRadius, #62F525, 5, null, 100);
-
+  
   // Create a new explosion with specified parameters
 
-  Explosion explosion = new Explosion(x, y, z, 500, 600, explosionScale, shockwaveSize, a, b, f, bombType); // Customize parameters
+  Explosion explosion = new Explosion(x, y, z, 500, 600, explosionScale, shockwaveSize,a,b,f); // Customize parameters
   explosions.add(explosion); // Add the explosion to the list 100 200
-
   return explosion;
 }
 
 void keyPressed() {
   if (key == 'e') {
+    long newCount = 4785060131L;  // Simulamos un número aleatorio
+    updatePeopleCount(newCount, 46109212, newCount, newCount);  // Actualizamos el label con el nuevo número
 
-
+    float x = radius * sin(phi) * cos(theta);
+    float y = radius * sin(phi) * sin(theta);
+    float z = radius * cos(phi);
 
     Explosion actualExp = triggerExplosion();
     c.lookForAfectedPeople(actualExp);
-
-    long deadPeoplePB = c.getDeadPeoplePerBomb();
-    long deadPeople = c.getTotalDeadPeople();
-    long hurtPeople =c.getTotalHurtPoblation();
-    long radPeople = c.getTotalRadiatedPoblation();
-    long radPb =c.getIrraditedPeoplePerBomb();
-    long hurtPb = c.getHurtPeoplePerBomb();
-    long totalP=c.getTotalAlivePeople();
-
-
-
-
-    updatePeopleCount(totalP, deadPeople, hurtPeople, radPeople, deadPeoplePB, radPb, hurtPb); // Tot - Dead - Hurt - Rad - deadPB - radPB - hurtPB
-
+    //Temporal
+   
+  }
+  if (key == ESC) {  // Si se presiona la tecla ESC
+    isRunning = false;  // Detener la simulación
+    exit();  // Llamar a la función exit
   }
 }
 
