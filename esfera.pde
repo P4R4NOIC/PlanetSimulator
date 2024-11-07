@@ -102,13 +102,43 @@ class Esfera {
          deadPeoplePerBomb+=peopleGroup.getDeadPoblation();
       }
       else if(itTouch(peopleGroup.pos, peopleGroup.diameter, actualExp.getRadS().pos, actualExp.getRadS().diameter)){
-        
-        irradietedPeoplePerBomb+=peopleGroup.getPeopleRadiated();
-        
-      }
-      else if(itTouch(peopleGroup.pos, peopleGroup.diameter, actualExp.getHurtS().pos, actualExp.getHurtS().diameter)){
+        if(actualExp.bombType==1){
+          
+          peopleGroup.changeHurtPoblation(60);
+          peopleGroup.changeDeadPoblation(55);
+          peopleGroup.changeIrraditedPoblation(60);
+        }else if(actualExp.bombType==2){
+         
+          peopleGroup.changeHurtPoblation(60);
+          peopleGroup.changeDeadPoblation(45);
+          peopleGroup.changeIrraditedPoblation(60);
+        }else if(actualExp.bombType==3){
+          
+          peopleGroup.changeHurtPoblation(70);
+          peopleGroup.changeDeadPoblation(60);
+          peopleGroup.changeIrraditedPoblation(60);
+        }
         
         hurtPeoplePerbomb+=peopleGroup.getHurtPoblation();
+        deadPeoplePerBomb+=peopleGroup.getDeadPoblation();
+        irradietedPeoplePerBomb+=peopleGroup.getPeopleRadiated();
+      }
+      else if(itTouch(peopleGroup.pos, peopleGroup.diameter, actualExp.getHurtS().pos, actualExp.getHurtS().diameter)){
+        if(actualExp.bombType==1){
+          
+          peopleGroup.changeHurtPoblation(50);
+          peopleGroup.changeDeadPoblation(40);
+        }else if(actualExp.bombType==2){
+         
+          peopleGroup.changeHurtPoblation(35);
+          peopleGroup.changeDeadPoblation(25);
+        }else if(actualExp.bombType==3){
+          
+          peopleGroup.changeHurtPoblation(40);
+          peopleGroup.changeDeadPoblation(30);
+        }
+        hurtPeoplePerbomb+=peopleGroup.getHurtPoblation();
+        deadPeoplePerBomb+=peopleGroup.getDeadPoblation();
         
       }
       
@@ -118,6 +148,12 @@ class Esfera {
   }
   long getDeadPeoplePerBomb(){
    return this.deadPeoplePerBomb;
+  }
+  long getHurtPeoplePerBomb(){
+   return this.hurtPeoplePerbomb;
+  }
+  long getIrraditedPeoplePerBomb(){
+   return this.irradietedPeoplePerBomb;
   }
 
   void draw() {
@@ -161,6 +197,37 @@ class Esfera {
       tdPeople += cluster.getDeadPoblation();
     }
     return tdPeople;
+  }
+  
+  long getTotalAlivePeople() {
+    long AlivePeople =0;
+    for (peopleComul cluster : populationClusters) {
+      if(!cluster.isDead()){
+        AlivePeople += cluster.getPoblationN();
+      }
+
+    }
+    return AlivePeople;
+  }
+  long getTotalHurtPoblation() {
+    long hurtPeople =0;
+    for (peopleComul cluster : populationClusters) {
+      if(!cluster.isDead()){
+        hurtPeople += cluster.getHurtPoblation();
+      }
+
+    }
+    return hurtPeople;
+  }
+  long getTotalRadiatedPoblation() {
+    long IrradiatedPeople =0;
+    for (peopleComul cluster : populationClusters) {
+      if(!cluster.isDead()){
+        IrradiatedPeople += cluster.getPeopleRadiated();
+      }
+
+    }
+    return IrradiatedPeople;
   }
 
 

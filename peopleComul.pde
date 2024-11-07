@@ -59,9 +59,42 @@ randomizar con una semilla (gacha roberto) la el tamano y la cantidad de poblaci
       for(int i =0;i<p;i++){
          float liveProb = random(0,100);
          if(liveProb<percent){
-           poblationN -= 1;
+           hurtPoblation +=1;
+           if(hurtPoblation>=poblationN){
+              hurtPoblation-=1;
+              poblationN-=1;
+              deadPoblation +=1;
+              opacity -=0.1;
+           }  
+         }
+      }
+    }
+    
+    void changeDeadPoblation(float percent){
+      long p = poblationN;
+      for(int i =0;i<p;i++){
+         float liveProb = random(0,100);
+         if(liveProb<percent){
+           poblationN-=1;
            deadPoblation +=1;
-           opacity -= 0.1;
+           opacity -=0.1;
+           
+         }
+      }
+    }
+    
+    void changeIrraditedPoblation(float percent){
+      long p = poblationN;
+      for(int i =0;i<p;i++){
+         float liveProb = random(0,100);
+         if(liveProb<percent){
+           peopleRadiated +=1;
+           if(peopleRadiated>=poblationN){
+              peopleRadiated-=1;
+              poblationN-=1;
+              deadPoblation +=1;
+              opacity -=0.1;
+           }  
          }
       }
     }
