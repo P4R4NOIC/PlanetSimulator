@@ -57,55 +57,56 @@ Button botonHiroshima, botonHidrogeno, botonTSAR;
 void bombInfo() {
   controlP5 = new ControlP5(this);
 
-  totalPeople = controlP5.addTextlabel("totalPeopleLabel")
-    .setText("Total de personas: 1.000.000")
+  // Labels principales
+  controlP5.addTextlabel("totalPeopleLabel")
+    .setText("Total de personas: 0")
     .setPosition(10, 10)
     .setColorValue(#444444)
     .setFont(createFont("Georgia", 40))
     .setSize(200, 40);
 
-
-  totalDeadPeople = controlP5.addTextlabel("totalDeadPeople")
+  controlP5.addTextlabel("totalDeadPeople")
     .setText("Total de personas muertas: 0")
     .setPosition(10, 50)
     .setColorValue(#FF0313)
     .setFont(createFont("Georgia", 40))
     .setSize(200, 40);
 
-  totalRadiatedPeople = controlP5.addTextlabel("totalRadiatedPeopleLabel")
+  controlP5.addTextlabel("totalRadiatedPeopleLabel")
     .setText("Total de personas irradiadas: 0")
     .setPosition(10, 90)
     .setColorValue(#39FF14)
     .setFont(createFont("Georgia", 40))
     .setSize(200, 40);
 
-  totalHurtPeople = controlP5.addTextlabel("totalHurtPeopleLabel")
+  controlP5.addTextlabel("totalHurtPeopleLabel")
     .setText("Total de personas heridas: 0")
     .setPosition(10, 130)
     .setColorValue(#FFD700)
     .setFont(createFont("Georgia", 40))
     .setSize(200, 40);
 
-  deadPeoplePerBomb = controlP5.addTextlabel("deadPeoplePerBombLabel")
+  // Labels secundarios
+  controlP5.addTextlabel("deadPeoplePerBombLabel")
     .setText("Personas muertas por la bomba individual: 0")
-    .setPosition(10, 170)
-    .setColorValue(#FFD700)
-    .setFont(createFont("Georgia", 40))
-    .setSize(200, 40);
+    .setPosition(10, 180)
+    .setColorValue(#B22222)
+    .setFont(createFont("Georgia", 27))
+    .setSize(300, 30);
 
-  radPeoplePerBomb = controlP5.addTextlabel("radPeoplePerBombLabel")
+  controlP5.addTextlabel("radPeoplePerBombLabel")
     .setText("Personas irradiadas por la bomba individual: 0")
-    .setPosition(10, 210)
-    .setColorValue(#FFD700)
-    .setFont(createFont("Georgia", 40))
-    .setSize(200, 40);
+    .setPosition(10, 220)
+    .setColorValue(#3CB371)
+    .setFont(createFont("Georgia", 27))
+    .setSize(300, 30);
 
-  hurtPeoplePerBomb = controlP5.addTextlabel("hurtPeoplePerBombLabel")
+  controlP5.addTextlabel("hurtPeoplePerBombLabel")
     .setText("Personas heridas por la bomba individual: 0")
-    .setPosition(10, 250)
-    .setColorValue(#FFD700)
-    .setFont(createFont("Georgia", 40))
-    .setSize(200, 40);
+    .setPosition(10, 260)
+    .setColorValue(#DAA520)
+    .setFont(createFont("Georgia", 27))
+    .setSize(300, 30);
 
 
   controlP5.addTextlabel("selectBomb")
@@ -268,16 +269,16 @@ void gui() {
 public void updatePeopleCount(long total, long dead, long hurt, long rad, long deadPB, long radPB, long hurtPB) {
   String newText = "Total de personas: " + total;
   totalPeople.setText(newText);
-  
+
   newText = "Total de personas muertas: " + dead;
   totalDeadPeople.setText(newText);
-  
+
   newText = "Total de personas irradiadas: " + rad;
   totalRadiatedPeople.setText(newText);
-  
+
   newText = "Total de personas heridas: " + hurt;
   totalHurtPeople.setText(newText);
-  
+
   newText = "Personas muertas por la bomba individual: " + deadPB;
   deadPeoplePerBomb.setText(newText);
   newText = "Personas irradiadas por la bomba individual: " + radPB;
@@ -359,7 +360,6 @@ void keyPressed() {
 
 
     updatePeopleCount(deadPeoplePB, deadPeople, 0, 0, 0, 0, 0); // Tot - Dead - Hurt - Rad - deadPB - radPB - hurtPB
-
   }
 }
 
