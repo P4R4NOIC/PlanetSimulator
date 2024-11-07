@@ -39,9 +39,14 @@ PMatrix3D currCameraMatrix;
 PGraphics3D g3;
 
 Textlabel totalPeople;
-Textlabel deadPeople;
-Textlabel radiatedPeople;
-Textlabel hurtPeople;
+Textlabel totalDeadPeople;
+Textlabel totalRadiatedPeople;
+Textlabel totalHurtPeople;
+
+Textlabel deadPeoplePerBomb;
+Textlabel radPeoplePerBomb;
+Textlabel hurtPeoplePerBomb;
+
 CColor colorPrincipal;
 CColor colorHiroshima;
 CColor colorHidrogeno;
@@ -60,27 +65,48 @@ void bombInfo() {
     .setSize(200, 40);
 
 
-  deadPeople = controlP5.addTextlabel("deadPeopleLabel")
-    .setText("Personas muertas: 0")
+  totalDeadPeople = controlP5.addTextlabel("totalDeadPeople")
+    .setText("Total de personas muertas: 0")
     .setPosition(10, 50)
     .setColorValue(#FF0313)
     .setFont(createFont("Georgia", 40))
     .setSize(200, 40);
 
-  radiatedPeople = controlP5.addTextlabel("radiatedPeopleLabel")
-    .setText("Personas irradiadas: 0")
+  totalRadiatedPeople = controlP5.addTextlabel("totalRadiatedPeopleLabel")
+    .setText("Total de personas irradiadas: 0")
     .setPosition(10, 90)
     .setColorValue(#39FF14)
     .setFont(createFont("Georgia", 40))
     .setSize(200, 40);
 
-
-  hurtPeople = controlP5.addTextlabel("hurtPeopleLabel")
-    .setText("Personas heridas: 0")
+  totalHurtPeople = controlP5.addTextlabel("totalHurtPeopleLabel")
+    .setText("Total de personas heridas: 0")
     .setPosition(10, 130)
     .setColorValue(#FFD700)
     .setFont(createFont("Georgia", 40))
     .setSize(200, 40);
+
+  deadPeoplePerBomb = controlP5.addTextlabel("deadPeoplePerBombLabel")
+    .setText("Personas muertas por la bomba individual: 0")
+    .setPosition(10, 170)
+    .setColorValue(#FFD700)
+    .setFont(createFont("Georgia", 40))
+    .setSize(200, 40);
+
+  radPeoplePerBomb = controlP5.addTextlabel("radPeoplePerBombLabel")
+    .setText("Personas irradiadas por la bomba individual: 0")
+    .setPosition(10, 210)
+    .setColorValue(#FFD700)
+    .setFont(createFont("Georgia", 40))
+    .setSize(200, 40);
+
+  hurtPeoplePerBomb = controlP5.addTextlabel("hurtPeoplePerBombLabel")
+    .setText("Personas heridas por la bomba individual: 0")
+    .setPosition(10, 250)
+    .setColorValue(#FFD700)
+    .setFont(createFont("Georgia", 40))
+    .setSize(200, 40);
+
 
   controlP5.addTextlabel("selectBomb")
     .setText("Seleccionar bomba:")
@@ -124,8 +150,8 @@ void bombInfo() {
 }
 
 void setup() {
-  size(800, 600, OPENGL);
-  //fullScreen(OPENGL);
+  //size(800, 600, OPENGL);
+  fullScreen(OPENGL);
   g3 = (PGraphics3D)g;
   background(0);
   smallSpheres = new PVector[numSpheres];
@@ -175,20 +201,19 @@ void draw() {
     Explosion exp = explosions.get(i);
     exp.draw(); // Call the draw method of Explosion
     /*if (exp.isComplete()) {
-      explosions.remove(i); // Remove completed explosions
-    }*/
-    
+     explosions.remove(i); // Remove completed explosions
+     }*/
   }
-  for (int i = explosions.size() - 1; i >= 0; i--){
+  for (int i = explosions.size() - 1; i >= 0; i--) {
     Explosion exp = explosions.get(i);
-    if(exp.isComplete()){
+    if (exp.isComplete()) {
       exp.drawDead();
       exp.drawRad();
       exp.drawHurt();
     }
   }
 
-  
+
 
 
   if (keyPressed) {
@@ -240,15 +265,25 @@ void gui() {
   hint(ENABLE_DEPTH_TEST);
 }
 
-public void updatePeopleCount(long total, long dead, long hurt, long rad) {
+public void updatePeopleCount(long total, long dead, long hurt, long rad, long deadPB, long radPB, long hurtPB) {
   String newText = "Total de personas: " + total;
   totalPeople.setText(newText);
-  newText = "Personas muertas: " + dead;
-  deadPeople.setText(newText);
-  newText = "Personas irradiadas: " + rad;
-  radiatedPeople.setText(newText);
-  newText = "Personas heridas: " + hurt;
-  hurtPeople.setText(newText);
+  
+  newText = "Total de personas muertas: " + dead;
+  totalDeadPeople.setText(newText);
+  
+  newText = "Total de personas irradiadas: " + rad;
+  totalRadiatedPeople.setText(newText);
+  
+  newText = "Total de personas heridas: " + hurt;
+  totalHurtPeople.setText(newText);
+  
+  newText = "Personas muertas por la bomba individual: " + deadPB;
+  deadPeoplePerBomb.setText(newText);
+  newText = "Personas irradiadas por la bomba individual: " + radPB;
+  radPeoplePerBomb.setText(newText);
+  newText = "Personas heridas por la bomba individual: " + hurtPB;
+  hurtPeoplePerBomb.setText(newText);
 }
 
 public void Hiroshima() {
@@ -302,31 +337,30 @@ Explosion triggerExplosion() {
   Esfera b = new Esfera(x, y, z, radCircleRadius, #EEF231, 5, null, 100);
 
   Esfera f = new Esfera(x, y, z, hurtCircleRadius, #62F525, 5, null, 100);
-  
+
   // Create a new explosion with specified parameters
 
-  Explosion explosion = new Explosion(x, y, z, 500, 600, explosionScale, shockwaveSize,a,b,f,bombType); // Customize parameters
+  Explosion explosion = new Explosion(x, y, z, 500, 600, explosionScale, shockwaveSize, a, b, f, bombType); // Customize parameters
   explosions.add(explosion); // Add the explosion to the list 100 200
-  
+
   return explosion;
 }
 
 void keyPressed() {
   if (key == 'e') {
 
-    
+
 
     Explosion actualExp = triggerExplosion();
     c.lookForAfectedPeople(actualExp);
-    
+
     long deadPeoplePB = c.getDeadPeoplePerBomb();
     long deadPeople = c.getTotalDeadPeople();
-    
-    
-    updatePeopleCount(deadPeoplePB, deadPeople, 0, 0); // Tot - Dead - Hurt - Rad
-   
+
+
+    updatePeopleCount(deadPeoplePB, deadPeople, 0, 0, 0, 0, 0); // Tot - Dead - Hurt - Rad - deadPB - radPB - hurtPB
+
   }
- 
 }
 
 void exit() {
