@@ -58,28 +58,28 @@ void bombInfo() {
   controlP5 = new ControlP5(this);
 
   // Labels principales
-  controlP5.addTextlabel("totalPeopleLabel")
+  totalPeople = controlP5.addTextlabel("totalPeopleLabel")
     .setText("Total de personas: 0")
     .setPosition(10, 10)
     .setColorValue(#444444)
     .setFont(createFont("Georgia", 40))
     .setSize(200, 40);
 
-  controlP5.addTextlabel("totalDeadPeople")
+  totalDeadPeople = controlP5.addTextlabel("totalDeadPeople")
     .setText("Total de personas muertas: 0")
     .setPosition(10, 50)
     .setColorValue(#FF0313)
     .setFont(createFont("Georgia", 40))
     .setSize(200, 40);
 
-  controlP5.addTextlabel("totalRadiatedPeopleLabel")
+  totalRadiatedPeople = controlP5.addTextlabel("totalRadiatedPeopleLabel")
     .setText("Total de personas irradiadas: 0")
     .setPosition(10, 90)
     .setColorValue(#39FF14)
     .setFont(createFont("Georgia", 40))
     .setSize(200, 40);
 
-  controlP5.addTextlabel("totalHurtPeopleLabel")
+  totalHurtPeople = controlP5.addTextlabel("totalHurtPeopleLabel")
     .setText("Total de personas heridas: 0")
     .setPosition(10, 130)
     .setColorValue(#FFD700)
@@ -87,14 +87,14 @@ void bombInfo() {
     .setSize(200, 40);
 
   // Labels secundarios
-  controlP5.addTextlabel("deadPeoplePerBombLabel")
+  deadPeoplePerBomb = controlP5.addTextlabel("deadPeoplePerBombLabel")
     .setText("Personas muertas por la bomba individual: 0")
     .setPosition(10, 180)
     .setColorValue(#B22222)
     .setFont(createFont("Georgia", 27))
     .setSize(300, 30);
 
-  controlP5.addTextlabel("radPeoplePerBombLabel")
+  hurtPeoplePerBomb = radPeoplePerBomb = controlP5.addTextlabel("radPeoplePerBombLabel")
     .setText("Personas irradiadas por la bomba individual: 0")
     .setPosition(10, 220)
     .setColorValue(#3CB371)
@@ -151,8 +151,8 @@ void bombInfo() {
 }
 
 void setup() {
-  //size(800, 600, OPENGL);
-  fullScreen(OPENGL);
+  size(800, 600, OPENGL);
+  //fullScreen(OPENGL);
   g3 = (PGraphics3D)g;
   background(0);
   smallSpheres = new PVector[numSpheres];
@@ -362,12 +362,18 @@ void keyPressed() {
     long radPb =c.getIrraditedPeoplePerBomb();
     long hurtPb = c.getHurtPeoplePerBomb();
     long totalP=c.getTotalAlivePeople();
+    println("Total de personas vivas: " + totalP);
+    println("Total de personas muertas: " + deadPeople);
+    println("Total de personas heridas: " + hurtPeople);
+    println("Total de personas irradiadas: " + radPeople);
+
+    println("Personas muertas por bomba individual: " + deadPeoplePB);
+    println("Personas irradiadas por bomba individual: " + radPb);
+    println("Personas heridas por bomba individual: " + hurtPb);
 
 
 
     updatePeopleCount(totalP, deadPeople, hurtPeople, radPeople, deadPeoplePB, radPb, hurtPb); // Tot - Dead - Hurt - Rad - deadPB - radPB - hurtPB
-
-
   }
 }
 
