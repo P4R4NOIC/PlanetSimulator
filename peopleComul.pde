@@ -60,7 +60,7 @@ randomizar con una semilla (gacha roberto) la el tamano y la cantidad de poblaci
          float liveProb = random(0,100);
          if(liveProb<percent){
            hurtPoblation +=1;
-           if(hurtPoblation>=poblationN){
+           if(hurtPoblation>=poblationN*0.7){
               hurtPoblation-=1;
               poblationN-=1;
               deadPoblation +=1;
@@ -89,7 +89,7 @@ randomizar con una semilla (gacha roberto) la el tamano y la cantidad de poblaci
          float liveProb = random(0,100);
          if(liveProb<percent){
            peopleRadiated +=1;
-           if(peopleRadiated>=poblationN){
+           if(peopleRadiated>=poblationN*0.7){
               peopleRadiated-=1;
               poblationN-=1;
               deadPoblation +=1;

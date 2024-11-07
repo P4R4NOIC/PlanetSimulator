@@ -357,9 +357,17 @@ void keyPressed() {
 
     long deadPeoplePB = c.getDeadPeoplePerBomb();
     long deadPeople = c.getTotalDeadPeople();
+    long hurtPeople =c.getTotalHurtPoblation();
+    long radPeople = c.getTotalRadiatedPoblation();
+    long radPb =c.getIrraditedPeoplePerBomb();
+    long hurtPb = c.getHurtPeoplePerBomb();
+    long totalP=c.getTotalAlivePeople();
 
 
-    updatePeopleCount(deadPeoplePB, deadPeople, 0, 0, 0, 0, 0); // Tot - Dead - Hurt - Rad - deadPB - radPB - hurtPB
+
+    updatePeopleCount(totalP, deadPeople, hurtPeople, radPeople, deadPeoplePB, radPb, hurtPb); // Tot - Dead - Hurt - Rad - deadPB - radPB - hurtPB
+
+
   }
 }
 
