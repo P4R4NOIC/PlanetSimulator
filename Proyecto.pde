@@ -151,8 +151,8 @@ void bombInfo() {
 }
 
 void setup() {
-  size(800, 600, OPENGL);
-  //fullScreen(OPENGL);
+  //size(800, 600, OPENGL);
+  fullScreen(OPENGL);
   g3 = (PGraphics3D)g;
   background(0);
   smallSpheres = new PVector[numSpheres];
