@@ -295,7 +295,7 @@ public void Hiroshima() {
   explosionScale = 0.25;
   shockwaveSize = 10;
   deadCircleRadius = 2.5;
-  radCircleRadius = 5;
+  radCircleRadius = 6;
   hurtCircleRadius = 10;
   bombType = 1;
 }
@@ -308,7 +308,7 @@ public void Hidrogeno() {
   explosionScale = 0.5;
   shockwaveSize = 25;
   deadCircleRadius = 4;
-  radCircleRadius = 10;
+  radCircleRadius = 13;
   hurtCircleRadius = 20;
   bombType = 2;
 }
@@ -321,7 +321,7 @@ public void TSAR() {
   explosionScale = 1;
   shockwaveSize = 50;
   deadCircleRadius = 10;
-  radCircleRadius = 20;
+  radCircleRadius = 30;
   hurtCircleRadius = 50;
   bombType = 3;
 }
@@ -362,18 +362,13 @@ void keyPressed() {
     long radPb =c.getIrraditedPeoplePerBomb();
     long hurtPb = c.getHurtPeoplePerBomb();
     long totalP=c.getTotalAlivePeople();
-    println("Total de personas vivas: " + totalP);
-    println("Total de personas muertas: " + deadPeople);
-    println("Total de personas heridas: " + hurtPeople);
-    println("Total de personas irradiadas: " + radPeople);
+   
 
-    println("Personas muertas por bomba individual: " + deadPeoplePB);
-    println("Personas irradiadas por bomba individual: " + radPb);
-    println("Personas heridas por bomba individual: " + hurtPb);
 
 
 
     updatePeopleCount(totalP, deadPeople, hurtPeople, radPeople, deadPeoplePB, radPb, hurtPb); // Tot - Dead - Hurt - Rad - deadPB - radPB - hurtPB
+
   }
 }
 

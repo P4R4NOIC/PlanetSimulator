@@ -92,60 +92,70 @@ class Esfera {
     return distancia <= (radio1 + radio2);
   }
   
-  void lookForAfectedPeople(Explosion actualExp){
-    deadPeoplePerBomb=0;
-    hurtPeoplePerbomb=0;
-    irradietedPeoplePerBomb=0;
-    for(peopleComul peopleGroup : populationClusters){
-      if(itTouch(peopleGroup.pos, peopleGroup.diameter, actualExp.getDeadS().pos, actualExp.getDeadS().diameter)){
-         peopleGroup.redZone();
-         deadPeoplePerBomb+=peopleGroup.getDeadPoblation();
-      }
-      else if(itTouch(peopleGroup.pos, peopleGroup.diameter, actualExp.getRadS().pos, actualExp.getRadS().diameter)){
-        if(actualExp.bombType==1){
-          
-          peopleGroup.changeHurtPoblation(60);
-          peopleGroup.changeDeadPoblation(55);
-          peopleGroup.changeIrraditedPoblation(60);
-        }else if(actualExp.bombType==2){
-         
-          peopleGroup.changeHurtPoblation(60);
-          peopleGroup.changeDeadPoblation(45);
-          peopleGroup.changeIrraditedPoblation(60);
-        }else if(actualExp.bombType==3){
-          
-          peopleGroup.changeHurtPoblation(70);
-          peopleGroup.changeDeadPoblation(60);
-          peopleGroup.changeIrraditedPoblation(60);
+ void lookForAfectedPeople(Explosion actualExp) {
+    deadPeoplePerBomb = 0;
+    hurtPeoplePerbomb = 0;
+    irradietedPeoplePerBomb = 0;
+    
+    for (peopleComul peopleGroup : populationClusters) {
+        // Calculate 3D distance to explosion center
+        float distanceToExplosion = dist(
+            peopleGroup.pos.x, peopleGroup.pos.y, peopleGroup.pos.z,
+            actualExp.pos.x, actualExp.pos.y, actualExp.pos.z
+        );
+
+        // Dead Zone
+        if (distanceToExplosion <= actualExp.getDeadS().diameter ) {
+            peopleGroup.redZone();
+            deadPeoplePerBomb += peopleGroup.getDeadPoblation();
         }
         
-        hurtPeoplePerbomb+=peopleGroup.getHurtPoblation();
-        deadPeoplePerBomb+=peopleGroup.getDeadPoblation();
-        irradietedPeoplePerBomb+=peopleGroup.getPeopleRadiated();
-      }
-      else if(itTouch(peopleGroup.pos, peopleGroup.diameter, actualExp.getHurtS().pos, actualExp.getHurtS().diameter)){
-        if(actualExp.bombType==1){
-          
-          peopleGroup.changeHurtPoblation(50);
-          peopleGroup.changeDeadPoblation(40);
-        }else if(actualExp.bombType==2){
-         
-          peopleGroup.changeHurtPoblation(35);
-          peopleGroup.changeDeadPoblation(25);
-        }else if(actualExp.bombType==3){
-          
-          peopleGroup.changeHurtPoblation(40);
-          peopleGroup.changeDeadPoblation(30);
+        // Radiation Zone
+        else if (distanceToExplosion <= actualExp.getRadS().diameter ) {
+            float distanceEffect = distanceEffect(distanceToExplosion, actualExp.getRadS().diameter );
+            
+            if (actualExp.bombType == 1) {  // Hiroshima
+                peopleGroup.changeHurtPoblation(60 * distanceEffect);
+                peopleGroup.changeDeadPoblation(55 * distanceEffect);
+                peopleGroup.changeIrraditedPoblation(60 * distanceEffect);
+            } else if (actualExp.bombType == 2) {  // Hydrogen
+                peopleGroup.changeHurtPoblation(60 * distanceEffect);
+                peopleGroup.changeDeadPoblation(45 * distanceEffect);
+                peopleGroup.changeIrraditedPoblation(60 * distanceEffect);
+            } else if (actualExp.bombType == 3) {  // Tsar
+                peopleGroup.changeHurtPoblation(70 * distanceEffect);
+                peopleGroup.changeDeadPoblation(60 * distanceEffect);
+                peopleGroup.changeIrraditedPoblation(60 * distanceEffect);
+            }
+            
+            hurtPeoplePerbomb += peopleGroup.getHurtPoblation();
+            deadPeoplePerBomb += peopleGroup.getDeadPoblation();
+            irradietedPeoplePerBomb += peopleGroup.getPeopleRadiated();
         }
-        hurtPeoplePerbomb+=peopleGroup.getHurtPoblation();
-        deadPeoplePerBomb+=peopleGroup.getDeadPoblation();
         
-      }
-      
+        // Hurt Zone
+        else if (distanceToExplosion <= actualExp.getHurtS().diameter ) {
+            float distanceEffect = distanceEffect(distanceToExplosion, actualExp.getHurtS().diameter );
+
+            if (actualExp.bombType == 1) {  // Hiroshima
+                peopleGroup.changeHurtPoblation(50 * distanceEffect);
+                peopleGroup.changeDeadPoblation(40 * distanceEffect);
+            } else if (actualExp.bombType == 2) {  // Hydrogen
+                peopleGroup.changeHurtPoblation(35 * distanceEffect);
+                peopleGroup.changeDeadPoblation(25 * distanceEffect);
+            } else if (actualExp.bombType == 3) {  // Tsar
+                peopleGroup.changeHurtPoblation(40 * distanceEffect);
+                peopleGroup.changeDeadPoblation(30 * distanceEffect);
+            }
+            
+            hurtPeoplePerbomb += peopleGroup.getHurtPoblation();
+            deadPeoplePerBomb += peopleGroup.getDeadPoblation();
+        }
     }
-  
-  
-  }
+}
+float distanceEffect(float distance, float maxRadius) {
+    return 1 - (distance / maxRadius);  // Higher effect (1) when close, lower (0) when far
+}
   long getDeadPeoplePerBomb(){
    return this.deadPeoplePerBomb;
   }
@@ -246,19 +256,19 @@ class Esfera {
 
 
     for (int i =0; i<americaX.length; i++) {
-      peopleComul cluster = new peopleComul(americaX[i], americaY[i], americaZ[i], 10, #ff0000, 10, 255, 1000);
+      peopleComul cluster = new peopleComul(americaX[i], americaY[i], americaZ[i], 10, #ff0000, 10, 255, 1000000);
       populationClusters.add(cluster);
     }
 
 
     for (int i =0; i<EUX.length; i++) {
-      peopleComul cluster = new peopleComul(EUX[i], EUY[i], EUZ[i], 10, #1e88e5, 10, 255, 1000);
+      peopleComul cluster = new peopleComul(EUX[i], EUY[i], EUZ[i], 10, #1e88e5, 10, 255, 1000000);
       populationClusters.add(cluster);
     }
 
 
     for (int i =0; i<AFRICAX.length; i++) {
-      peopleComul cluster = new peopleComul(AFRICAX[i], AFRICAY[i], AFRICAZ[i], 10, #5e35b1, 10, 255, 1000);
+      peopleComul cluster = new peopleComul(AFRICAX[i], AFRICAY[i], AFRICAZ[i], 10, #5e35b1, 10, 255, 1000000);
       populationClusters.add(cluster);
     }
 
@@ -266,17 +276,17 @@ class Esfera {
     int indianCounter = 50;
     for (int i =0; i<ASIAX.length; i++) {
       if (indianCounter>0) {
-        peopleComul cluster = new peopleComul(ASIAX[i], ASIAY[i], ASIAZ[i], 10, #f4d03f, 10, 255, 1000);
+        peopleComul cluster = new peopleComul(ASIAX[i], ASIAY[i], ASIAZ[i], 10, #f4d03f, 10, 255, 1000000);
         populationClusters.add(cluster);
         indianCounter--;
       }
-      peopleComul cluster = new peopleComul(ASIAX[i], ASIAY[i], ASIAZ[i], 5, #f4d03f, 10, 255, 1000);
+      peopleComul cluster = new peopleComul(ASIAX[i], ASIAY[i], ASIAZ[i], 5, #f4d03f, 10, 255, 1000000);
       populationClusters.add(cluster);
     }
 
 
     for (int i =0; i<OCEANIAX.length; i++) {
-      peopleComul cluster = new peopleComul(OCEANIAX[i], OCEANIAY[i], OCEANIAZ[i], 10, #82e0aa, 10, 255, 1000);
+      peopleComul cluster = new peopleComul(OCEANIAX[i], OCEANIAY[i], OCEANIAZ[i], 10, #82e0aa, 10, 255, 1000000);
       populationClusters.add(cluster);
     }
   }

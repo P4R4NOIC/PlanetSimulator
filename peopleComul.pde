@@ -20,19 +20,21 @@ randomizar con una semilla (gacha roberto) la el tamano y la cantidad de poblaci
     color c;
     int detail;
     PShape globe;
-    int opacity;
+    float opacity;
     long poblationN;
+    long totalPoblationN;
     long deadPoblation;
     long hurtPoblation;
     long peopleRadiated;
 
-    peopleComul(float x, float y, float z, float d, color c, int detail,int opacity,long poblationN) {
+    peopleComul(float x, float y, float z, float d, color c, int detail,float opacity,long poblationN) {
         pos = new PVector(x, y, z);
         diameter = d;
         this.c = c;
         this.detail = detail;
         this.opacity = opacity;
         this.poblationN=poblationN;
+        this.totalPoblationN=poblationN;
         this.peopleRadiated=0;
         this.deadPoblation=0;
         this.hurtPoblation=0;
@@ -49,7 +51,13 @@ randomizar con una semilla (gacha roberto) la el tamano y la cantidad de poblaci
         sphere(diameter);
         popMatrix();
     }
-
+    void changeOpasity(){
+      println(poblationN);
+      println(totalPoblationN);
+      float calc = (float)poblationN/totalPoblationN;
+      this.opacity = 255*calc;
+      
+    }
     void update(float x, float y) {
         pos.x = x;
         pos.y = y;
@@ -64,10 +72,11 @@ randomizar con una semilla (gacha roberto) la el tamano y la cantidad de poblaci
               hurtPoblation-=1;
               poblationN-=1;
               deadPoblation +=1;
-              opacity -=0.1;
+              
            }  
          }
       }
+      changeOpasity();
     }
     
     void changeDeadPoblation(float percent){
@@ -77,10 +86,11 @@ randomizar con una semilla (gacha roberto) la el tamano y la cantidad de poblaci
          if(liveProb<percent){
            poblationN-=1;
            deadPoblation +=1;
-           opacity -=0.1;
+           
            
          }
       }
+      changeOpasity();
     }
     
     void changeIrraditedPoblation(float percent){
@@ -93,19 +103,23 @@ randomizar con una semilla (gacha roberto) la el tamano y la cantidad de poblaci
               peopleRadiated-=1;
               poblationN-=1;
               deadPoblation +=1;
-              opacity -=0.1;
+              
            }  
          }
       }
+      changeOpasity();
     }
     
     void redZone(){
       deadPoblation+=poblationN;
       poblationN =0;
     }
-    
+    float distanceEffect(float distance, float maxRadius) {
+        return 1 - (distance / maxRadius);  // Returns a fraction between 1 (close) and 0 (far)
+    }
     boolean isDead(){
-      if(opacity<30 || poblationN<500){
+      
+      if(opacity<10 || poblationN*0.10>=poblationN){
          return true; 
       }
       return false;
