@@ -3,7 +3,7 @@ class Esfera {
   float diameter;
   color c;
   int detail;
-  PImage texture; // This is the texture used for both the globe and land detection
+  PImage texture; 
   PShape globe;
   int opacity;
   ArrayList<peopleComul> populationClusters;
@@ -35,11 +35,10 @@ class Esfera {
     this.texture = texture;
     this.opacity = opacity;
     populationClusters = new ArrayList<peopleComul>();
-    this.globe = createShape(SPHERE, diameter / 2);  // Se crea la forma de la esfera
-    this.globe.setTexture(texture);  // Se aplica la textura equirectangular
+    this.globe = createShape(SPHERE, diameter / 2);  
+    this.globe.setTexture(texture); 
     this.globe.setStroke(false);
-    //Scale was put assuming a radious of 600
-    //Scale offset if the radious is different
+ 
     scaleOffset = d / 600;
     this.americaX = new float[]{-391.84818, -418.35168, -418.6028, -459.57803, -436.53552, -441.48764, -464.79156, -459.57803, -464.79156, -463.76596, -456.19656, -424.1256, -389.34158, -478.3452, -480.94318, -475.65598, -475.65598, -475.65598, -470.19693, -451.42465, -446.26105, -446.26105, -440.3835, -433.80145, -422.6306, -422.6306, -394.05228, -382.2186, -403.24786, -359.4621, -373.5624, -407.61777, -416.08484, -416.08484, -425.04028, -338.6587, -309.6249, -297.1278, -290.6997, -345.55392, -330.75555, -314.7667, -291.69656, -291.69656, -285.63144, -266.7605, -240.11795, -208.83647, -223.57271, -242.59692, -290.6997, -321.62665, -302.77353, -285.65015, -261.23096, -241.81097, -221.52068, -214.57639, -193.23979, -163.72278, -170.58702, -177.17836, -152.80414, -156.04178, -163.75572, -184.37132, -179.5075, -197.52353, -186.36346, -186.32608, -191.89474, -201.99121, -221.68799, -213.2156, -180.76646, -147.16098, -188.9954, -155.6591, -109.56167, -113.85931, -114.592316, -114.4777, -105.63074, -126.03494, -144.75888, -147.88022, -124.82433, -226.47433, -279.9861, -350.0879, -310.7834, -193.24583, -372.5473, -359.464, -157.88014, -147.35683, -177.58794, -146.49686, -165.84636, -329.5664, -341.49255, -352.8455, -351.14746, -227.44688, -231.54695, -251.42839, -257.35034, -270.94116, -201.32083, -138.41933, -131.34584, -114.56802, -89.88709, -72.51511, -61.81226, -41.066605, -48.65188, -36.91629, -4.968689, 33.51699, 20.093893, 1.6974905, -2.2345557, 66.938545, 93.624985, 99.50856, 119.45567, 123.30804, 127.11108, 97.03873, 64.43794, 80.88389, 83.72848, 91.72426, 69.747215, 88.25275, 118.542564, 137.81448, 128.28114, 112.99368, 118.13744, 118.13744, 133.27704, 138.2196, 138.2196, 147.93695, 132.24281, 109.16894, 109.16894, 99.62064, 208.49423, 184.10558, 196.45705, 163.29959, 199.93423, 185.11697, 218.56238, 243.45018, 234.74316, 227.72006, 177.25546, 174.36237, 162.10457, 148.8098, 119.33763, 73.7583, 81.91659, 90.61948, 146.61826, 137.45341, 127.409294, 48.306164, 67.48886, 77.60982, 31.59252, 3.2650607, 3.084243, 2.8984911, 2.7081017, -41.056725, -46.249134, -49.95104, -61.541416, -63.71745, -67.9922, -58.61472, -72.158165, -78.18864, -83.9377, -61.905, -12.073754, 11.452396, 34.937332, 37.300392, 39.52921, -21.257006, -46.292477, -4.700485, 22.601719, 62.080322, 226.41858, 226.41858, 208.5114, 202.11005, 221.65514, 221.65514, 214.3626, 209.07057, 209.84071, 162.08162, 131.36562, 100.17683, 68.62774, 45.889923, 64.73138, 104.33831, 123.90729, 23.699047, -31.949787, -14.381706, -117.55391, -124.873764, -127.21509, -152.47542, -122.48247, -117.55391, -97.721054, -.721054, -93.788864, -149.2425, -175.03362, -160.52383, -165.5701897, -263.76547, -305.89365, -233.45816, -181.78185, -372.02377, -297.80826, -266.83517, -244.02441};
     this.americaY = new float[]{15.681833, 16.742508, 8.372891, 83.63062, 79.437515, 44.297035, 46.635254, 83.63062, 46.635254, 55.921352, 55.00863, 51.14148, 46.94719, 57.679333, 28.891386, 76.762344, 76.762344, 76.762344, 105.147095, 120.091, 138.04753, 138.04753, 155.78319, 173.26962, 198.97087, 198.97087, 185.51645, 208.81209, 220.30072, 245.92792, 223.93007, 153.4318, 128.71274, 128.71274, 95.049, 273.86832, 306.31024, 318.4472, 324.3258, 236.41257, 256.7084, 276.08032, 300.35236, 300.35236, 306.12595, 322.7031, 342.9895, 372.6732, 364.02365, 361.71854, 324.3258, 293.68326, 276.4681, 294.12653, 316.01395, 331.11008, 345.01453, 349.37573, 361.61417, 375.90063, 391.6606, 406.79407, 370.9236, 339.54974, 356.33545, 314.11398, 305.82748, 294.5129, 266.20547, 290.1996, 222.90483, 254.55107, 237.59445, 187.01038, 158.54938, 129.07417, 165.76695, 136.52785, 33.892086, 13.729266, -4.586244, 6.876725, 44.66072, -10.104713, -38.509388, -23.86524, -20.14443, 36.548008, 45.183636, 56.496536, 50.15365, 31.185654, 148.80174, 178.0985, -70.50577, -65.80629, -106.4525, -91.84701, -103.97828, -59.97261, -48.12539, -35.4043, -49.486023, -107.07877, -97.897675, -106.30352, -91.03559, -83.81325, -109.98319, -82.97345, -93.7698, -96.50012, -88.92256, -103.57834, -110.3003, -119.58447, -141.67252, -157.10408, -161.3066, -157.86423, -183.26562, -184.35611, -207.03772, -195.9307, -184.6726, -242.62393, -291.25943, -300.65234, -309.925, -266.49063, -276.1911, -271.83005, -303.4654, -332.44528, -252.79172, -258.31787, -245.89496, -235.63496, -240.9577, -212.24242, -221.90424, -221.90424, -250.34178, -259.6257, -259.6257, -277.87833, -274.31363, -226.45108, -226.45108, -206.64488, -274.70596, -242.57217, -258.84613, -292.47903, -326.67517, -302.46506, -357.11194, -380.47162, -366.864, -407.85983, -432.1881, -425.13412, -395.2469, -362.8313, -373.56314, -385.16312, -427.76538, -473.21155, -458.95984, -430.27106, -398.8299, -321.34592, -317.87094, -365.5404, -353.20715, -354.60223, -334.9645, -314.7909, -294.11365, -312.11545, -351.5884, -379.7305, -287.61575, -297.78552, -317.7637, -339.84927, -337.23346, -365.41705, -392.2855, -358.92636, -391.97592, -391.99457, -390.60248, -417.0217, -441.94006, -418.14658, -416.11948, -435.51288, -458.9449, -477.79398, -425.2948, -425.2948, -391.65875, -492.78912, -484.31247, -484.31247, -468.37842, -456.81546, -511.6382, -507.36487, -516.17114, -523.1197, -528.1854, -513.0534, -498.19748, -491.43097, -486.86536, -481.22696, -450.5617, -466.90387, -392.7945, -417.25302, -425.07632, -416.6831, -409.26276, -392.7945, -415.87088, -415.87088, -399.1367, -434.58942, -424.8582, -438.67773, -452.4683, 222.17331, 159.25539, 93.248215, 72.607574, 91.04215, 240.83315, 274.75323, 295.199};
@@ -57,7 +56,7 @@ class Esfera {
     this.OCEANIAY= new float[]{411.5168, 407.95505, 362.7511, 350.92236, 324.18796, 349.71402, 332.83093, 335.89798, 344.4862, 318.32187, 272.2173, 300.23657, 279.09906, 260.25647, 195.44025, 167.36963, 176.79846, 193.27649, 199.12039, 147.2591, 155.88307, 180.6121, 227.97128, 251.59628, 289.1951, 311.44833, 316.12885, 330.56006, 339.94986, 328.06808, 342.77618, 323.3183, 354.53622, 334.1267};
     this.OCEANIAZ= new float[]{233.6507, 244.65596, 287.655, 277.06717, 255.56335, 255.56335, 255.56335, 244.65596, 244.65596, 244.65596, 244.65596, 244.65596, 255.56335, 255.56335, 328.814, 328.814, 328.814, 367.86972, 348.62073, 430.41327, 462.44293, 477.3606, 484.5345, 491.5146, 477.3606, 454.70517, 454.70517, 438.68713, 438.68713, 446.7855, 318.71136, 328.814, 308.48126, 421.96725};
     if (d != 600){
-      //Adjust the scale for a radious different of 600
+      
       this.americaX = multiplyByConstant(this.americaX, scaleOffset);
       this.americaY = multiplyByConstant(this.americaY, scaleOffset);
       this.americaZ = multiplyByConstant(this.americaZ, scaleOffset);
@@ -77,18 +76,18 @@ class Esfera {
 }
   float[] multiplyByConstant(float[] arr, float constant) {
   for (int i = 0; i < arr.length; i++) {
-    arr[i] *= constant; // Multiply each element by the constant
+    arr[i] *= constant;
   }
-  return arr; // Return the modified array
+  return arr; 
 }
   boolean itTouch(PVector centro1, float diametro1, PVector centro2, float diametro2) {
     float radio1 = diametro1;
     float radio2 = diametro2;
 
-    // Calcula la distancia entre los centros de las dos esferas
+   
     float distancia = PVector.dist(centro1, centro2);
 
-    // Verifica si la distancia es menor o igual a la suma de los radios
+  
     return distancia <= (radio1 + radio2);
   }
   
@@ -98,19 +97,19 @@ class Esfera {
     irradietedPeoplePerBomb = 0;
     
     for (peopleComul peopleGroup : populationClusters) {
-        // Calculate 3D distance to explosion center
+        
         float distanceToExplosion = dist(
             peopleGroup.pos.x, peopleGroup.pos.y, peopleGroup.pos.z,
             actualExp.pos.x, actualExp.pos.y, actualExp.pos.z
         );
 
-        // Dead Zone
+       
         if (distanceToExplosion <= actualExp.getDeadS().diameter ) {
             peopleGroup.redZone();
             deadPeoplePerBomb += peopleGroup.getDeadPoblation();
         }
         
-        // Radiation Zone
+        
         else if (distanceToExplosion <= actualExp.getRadS().diameter ) {
             float distanceEffect = distanceEffect(distanceToExplosion, actualExp.getRadS().diameter );
             
@@ -137,13 +136,13 @@ class Esfera {
         else if (distanceToExplosion <= actualExp.getHurtS().diameter ) {
             float distanceEffect = distanceEffect(distanceToExplosion, actualExp.getHurtS().diameter );
 
-            if (actualExp.bombType == 1) {  // Hiroshima
+            if (actualExp.bombType == 1) {  
                 peopleGroup.changeHurtPoblation(50 * distanceEffect);
                 peopleGroup.changeDeadPoblation(40 * distanceEffect);
-            } else if (actualExp.bombType == 2) {  // Hydrogen
+            } else if (actualExp.bombType == 2) {  
                 peopleGroup.changeHurtPoblation(35 * distanceEffect);
                 peopleGroup.changeDeadPoblation(25 * distanceEffect);
-            } else if (actualExp.bombType == 3) {  // Tsar
+            } else if (actualExp.bombType == 3) {  
                 peopleGroup.changeHurtPoblation(40 * distanceEffect);
                 peopleGroup.changeDeadPoblation(30 * distanceEffect);
             }
@@ -154,7 +153,7 @@ class Esfera {
     }
 }
 float distanceEffect(float distance, float maxRadius) {
-    return 1 - (distance / maxRadius);  // Higher effect (1) when close, lower (0) when far
+    return 1 - (distance / maxRadius);  
 }
   long getDeadPeoplePerBomb(){
    return this.deadPeoplePerBomb;
@@ -175,7 +174,7 @@ float distanceEffect(float distance, float maxRadius) {
     sphereDetail(detail);
 
     if (texture != null) {
-      // Create a globe shape with the texture
+      
       fill(255);
       globe = createShape(SPHERE, diameter);
       globe.setTexture(texture);
@@ -187,7 +186,7 @@ float distanceEffect(float distance, float maxRadius) {
       sphere(diameter);
     }
 
-    // Draw population clusters
+    
     drawPopulationClusters();
 
     popMatrix();
@@ -248,59 +247,125 @@ float distanceEffect(float distance, float maxRadius) {
     long  AmericaTotal = 1051020865;
     long EUTotal = 741651866;
     long  OceaniaTotal = 46109212;
-    println(americaX.length);
-    println(EUX.length);
-    println(AFRICAX.length);
-    println(ASIAX.length);
-    println(OCEANIAX.length);
-
-
+    long AmericaNodes =241;
+    long EUNodes = 64;
+    long AfricaNodes=134;
+    long AsiaNodes=261;
+    long OceaniaNodes=34;
+    
+    randomSeed(123);
+    
+    long remainingAmericaPopulation = AmericaTotal;
+    float maxRadius = 10;  // Limite máximo del radio
+    float scaleAmericaFactor = maxRadius / sqrt(AmericaTotal / AmericaNodes);
     for (int i =0; i<americaX.length; i++) {
-      peopleComul cluster = new peopleComul(americaX[i], americaY[i], americaZ[i], 10, #ff0000, 10, 255, 1000000);
+      long maxPopulationPerNode = remainingAmericaPopulation / (AmericaNodes - i);
+      
+      long populationPerNode = (long) random(1, maxPopulationPerNode + 1);
+      
+      float radius = min(maxRadius, sqrt(populationPerNode) * scaleAmericaFactor);
+      
+      
+      
+      peopleComul cluster = new peopleComul(
+        americaX[i], americaY[i], americaZ[i], 
+        radius, #ff0000, 10, 255, populationPerNode
+      );
       populationClusters.add(cluster);
+      
+      remainingAmericaPopulation -= populationPerNode;
     }
 
-
+    long remainingEUPopulation = EUTotal; 
+    float scaleEUFactor = maxRadius / sqrt(EUTotal / EUNodes);
     for (int i =0; i<EUX.length; i++) {
-      peopleComul cluster = new peopleComul(EUX[i], EUY[i], EUZ[i], 10, #1e88e5, 10, 255, 1000000);
+      long maxPopulationPerNode = remainingEUPopulation / (EUNodes - i);
+      
+      long populationPerNode = (long) random(1, maxPopulationPerNode + 1);
+      
+      float radius = min(maxRadius, sqrt(populationPerNode) * scaleEUFactor);
+      
+      
+      
+      
+      peopleComul cluster = new peopleComul(
+        EUX[i], EUY[i], EUZ[i], 
+        radius, #1e88e5, 10, 255, populationPerNode
+      );
       populationClusters.add(cluster);
+      remainingEUPopulation -= populationPerNode;
     }
 
-
+    long remainingAfricaPopulation = AfricaTotal; 
+    float scaleAfricaFactor = maxRadius / sqrt(AfricaTotal / AfricaNodes);
     for (int i =0; i<AFRICAX.length; i++) {
-      peopleComul cluster = new peopleComul(AFRICAX[i], AFRICAY[i], AFRICAZ[i], 10, #5e35b1, 10, 255, 1000000);
+      long maxPopulationPerNode = remainingAfricaPopulation / (AfricaNodes - i);
+      
+      long populationPerNode = (long) random(1, maxPopulationPerNode + 1);
+      
+      float radius = min(maxRadius, sqrt(populationPerNode) * scaleAfricaFactor);
+      
+      
+      
+      peopleComul cluster = new peopleComul(
+        AFRICAX[i], AFRICAY[i], AFRICAZ[i], 
+        radius, #5e35b1, 10, 255, populationPerNode
+      );
       populationClusters.add(cluster);
+      remainingAfricaPopulation -= populationPerNode;
     }
 
 
-    int indianCounter = 50;
+    
+    long remainingAsiaPopulation = AsiaTotal; 
+    float scaleAsiaFactor = maxRadius / sqrt(AsiaTotal / AsiaNodes);
     for (int i =0; i<ASIAX.length; i++) {
-      if (indianCounter>0) {
-        peopleComul cluster = new peopleComul(ASIAX[i], ASIAY[i], ASIAZ[i], 10, #f4d03f, 10, 255, 1000000);
-        populationClusters.add(cluster);
-        indianCounter--;
-      }
-      peopleComul cluster = new peopleComul(ASIAX[i], ASIAY[i], ASIAZ[i], 5, #f4d03f, 10, 255, 1000000);
+      long maxPopulationPerNode = remainingAsiaPopulation / (AsiaNodes - i);
+      
+      long populationPerNode = (long) random(1, maxPopulationPerNode + 1);
+      
+      float radius = min(maxRadius, sqrt(populationPerNode) * scaleAsiaFactor);
+      
+      
+      
+      peopleComul cluster = new peopleComul(
+        ASIAX[i], ASIAY[i], ASIAZ[i], 
+        radius, #f4d03f, 10, 255, populationPerNode
+      );
       populationClusters.add(cluster);
+      remainingAsiaPopulation -= populationPerNode;
+      
     }
 
-
+    long remainingOceaniaPopulation = OceaniaTotal; 
+    float scaleOceniaFactor = maxRadius / sqrt(OceaniaTotal / OceaniaNodes);
     for (int i =0; i<OCEANIAX.length; i++) {
-      peopleComul cluster = new peopleComul(OCEANIAX[i], OCEANIAY[i], OCEANIAZ[i], 10, #82e0aa, 10, 255, 1000000);
+      long maxPopulationPerNode = remainingOceaniaPopulation / (OceaniaNodes - i);
+      
+      long populationPerNode = (long) random(1, maxPopulationPerNode + 1);
+      
+      float radius = min(maxRadius, sqrt(populationPerNode) * scaleOceniaFactor);
+      
+       peopleComul cluster = new peopleComul(
+        OCEANIAX[i], OCEANIAY[i], OCEANIAZ[i], 
+        radius, #82e0aa, 10, 255, populationPerNode
+      );
       populationClusters.add(cluster);
+      
+      remainingOceaniaPopulation -= populationPerNode;
     }
   }
 
 
 
-  // Helper method to determine if a pixel color represents land, excluding any type of blue
+ 
   boolean isLand(color pixelColor) {
-    // Obtener los valores RGB del píxel
+  
     int redValue = int(red(pixelColor));
     int greenValue = int(green(pixelColor));
     int blueValue = int(blue(pixelColor));
 
-    // Comprobar si el color es exactamente blanco (RGB 255, 255, 255)
+
     boolean isWhite = (redValue == 255 && greenValue == 255 && blueValue ==255);
 
     return isWhite;
