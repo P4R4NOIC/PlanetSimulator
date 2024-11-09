@@ -148,21 +148,28 @@ void bombInfo() {
     .setSize(80, 50)
     .setColor(colorPrincipal);
 
+  // Botón Simulacion Hiroshima
+  botonTSAR = controlP5.addButton("SimularHiroshima")
+    .setValue(0)
+    .setPosition(400, height - 100)
+    .setSize(80, 50)
+    .setColor(colorPrincipal);
+
   // Información
   infoGroup = controlP5.addGroup("Mostrar informacion sobre la bomba:")
-                 .setPosition(10, 350)
-                 .setWidth(400)
-                 .setHeight(20)
-                 .close()
-                 .setBackgroundColor(color(255,80))
-                 .setBackgroundHeight(220)
-                 .setFont(createFont("Georgia", 15));
-  
+    .setPosition(10, 350)
+    .setWidth(400)
+    .setHeight(20)
+    .close()
+    .setBackgroundColor(color(255, 80))
+    .setBackgroundHeight(220)
+    .setFont(createFont("Georgia", 15));
+
   infoLabel = controlP5.addTextlabel("infoLabel")
-                 .setPosition(10, 10)
-                 .setWidth(430)
-                 .setFont(createFont("Georgia", 15))
-                 .setGroup(infoGroup);
+    .setPosition(10, 10)
+    .setWidth(430)
+    .setFont(createFont("Georgia", 15))
+    .setGroup(infoGroup);
 
 
   controlP5.setAutoDraw(false);
@@ -207,6 +214,8 @@ void setup() {
   bombInfo();
   Hiroshima();
   explosions = new ArrayList<Explosion>();
+  theta = 0;
+  phi = HALF_PI;
 }
 
 void draw() {
@@ -380,6 +389,12 @@ public void TSAR() {
     "nube de hongo de 60 km de altura. La bomba más \n"+
     "poderosa probada.";
   if (infoLabel != null) infoLabel.setText(info);
+}
+
+public void SimularHiroshima() {
+  Hiroshima();
+  theta = 5.489243;
+  phi = 0.91484404;
 }
 
 Explosion triggerExplosion() {
