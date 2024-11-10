@@ -14,7 +14,7 @@ class Particle {
   void update() {
     position.add(velocity);
     velocity.mult(0.98);  // Slow down slightly over time
-    lifespan -= 1.5;      // Decrease lifespan for fading effect
+    lifespan -= 1;      // Decrease lifespan for fading effect
   }
 
   void display() {

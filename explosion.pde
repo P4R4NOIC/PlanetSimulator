@@ -26,24 +26,23 @@ class Explosion {
         this.hurtSphere = hurtSphere;
         this.bombType = bombType;
 
-        // Initialize particles for the rising column
+        // Initialize particles for the rising column with reduced speed
         for (int i = 0; i < columnCount; i++) {
             float offsetX = random(-5 * explosionScale, 5 * explosionScale); // Scale the offset
             float offsetZ = random(-5 * explosionScale, 5 * explosionScale); // Scale the offset
             PVector startPos = pos.copy().add(new PVector(offsetX, 0, offsetZ)); // Use the scaled offsets for a wider base
-            PVector velocity = upDirection.copy().mult(random(1, 2)).mult(explosionScale); // Scale velocity
-            columnParticles.add(new Particle(startPos, velocity, 120, 2 * explosionScale)); // Scale size
+            PVector velocity = upDirection.copy().mult(random(0.5, 1)).mult(explosionScale); // Reduced initial velocity for slower movement
+            columnParticles.add(new Particle(startPos, velocity, 180, 2 * explosionScale)); // Increased lifespan
         }
 
-        // Initialize particles for the mushroom cap
+        // Initialize particles for the mushroom cap with reduced speed
         for (int i = 0; i < capCount; i++) {
-            // Position the cap particles directly above the explosion center with less outward spread
             PVector capPos = pos.copy().add(upDirection.copy().mult(20 * explosionScale)); // Scale position
-            // Reduce the spread by limiting the range of random outward movement
-            PVector randomOutward = PVector.random3D().mult(random(0.2 * explosionScale, 0.5 * explosionScale)); // Adjusted scale
-            PVector capVelocity = upDirection.copy().mult(0.1).add(randomOutward);
-            capParticles.add(new Particle(capPos, capVelocity, 100, 2 * explosionScale)); // Scale size
+            PVector randomOutward = PVector.random3D().mult(random(0.1 * explosionScale, 0.3 * explosionScale)); // Adjusted scale for slower spread
+            PVector capVelocity = upDirection.copy().mult(0.05).add(randomOutward); // Reduced velocity
+            capParticles.add(new Particle(capPos, capVelocity, 160, 2 * explosionScale)); // Increased lifespan
         }
+
         // Create a shock wave with the specified size
         shockwaves.add(new Shockwave(pos, shockwaveSize)); // Use the shockwave size parameter
     }
@@ -67,7 +66,7 @@ class Explosion {
             for (int i = columnParticles.size() - 1; i >= 0; i--) {
                 Particle p = columnParticles.get(i);
                 p.update();
-                p.velocity.mult(0.96);
+                p.velocity.mult(0.5); // Slower velocity decay for smoother movement
                 p.display();
 
                 if (p.isDead()) {
@@ -87,6 +86,7 @@ class Explosion {
             }
         }   
     }
+
     void drawDead(){
        deadSphere.draw();
     }
