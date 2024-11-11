@@ -68,7 +68,7 @@ void bombInfo() {
 
   // Labels principales
   totalPeople = controlP5.addTextlabel("totalPeopleLabel")
-    .setText("Total de personas: 0")
+    .setText("Total de personas vivas: 0")
     .setPosition(10, 10)
     .setColorValue(#444444)
     .setFont(createFont("Georgia", 40))
@@ -303,7 +303,7 @@ void gui() {
 }
 
 public void updatePeopleCount(long total, long dead, long hurt, long rad, long deadPB, long radPB, long hurtPB) {
-  String newText = "Total de personas: " + total;
+  String newText = "Total de personas vivas: " + total;
   totalPeople.setText(newText);
 
   newText = "Total de personas muertas: " + dead;
