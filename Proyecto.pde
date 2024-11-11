@@ -53,6 +53,8 @@ CColor colorHidrogeno;
 CColor colorTSAR;
 
 Button botonHiroshima, botonHidrogeno, botonTSAR;
+Group infoGroup;
+Textlabel infoLabel;
 
 void bombInfo() {
   controlP5 = new ControlP5(this);
@@ -146,6 +148,29 @@ void bombInfo() {
     .setSize(80, 50)
     .setColor(colorPrincipal);
 
+  // Botón Simulacion Hiroshima
+  botonTSAR = controlP5.addButton("SimularHiroshima")
+    .setValue(0)
+    .setPosition(400, height - 100)
+    .setSize(80, 50)
+    .setColor(colorPrincipal);
+
+  // Información
+  infoGroup = controlP5.addGroup("Mostrar informacion sobre la bomba:")
+    .setPosition(10, 350)
+    .setWidth(400)
+    .setHeight(20)
+    .close()
+    .setBackgroundColor(color(255, 80))
+    .setBackgroundHeight(220)
+    .setFont(createFont("Georgia", 15));
+
+  infoLabel = controlP5.addTextlabel("infoLabel")
+    .setPosition(10, 10)
+    .setWidth(430)
+    .setFont(createFont("Georgia", 15))
+    .setGroup(infoGroup);
+
 
   controlP5.setAutoDraw(false);
 }
@@ -189,6 +214,8 @@ void setup() {
   bombInfo();
   Hiroshima();
   explosions = new ArrayList<Explosion>();
+  theta = 0;
+  phi = HALF_PI;
 }
 
 void draw() {
@@ -298,6 +325,20 @@ public void Hiroshima() {
   radCircleRadius = 6;
   hurtCircleRadius = 10;
   bombType = 1;
+
+  String info = "Bomba de Hiroshima (\"Little Boy\")\n" +
+    "Fecha: 6 de agosto de 1945\n" +
+    "Explosivo: Uranio-235\n" +
+    "Peso del explosivo: 64kg\n" +
+    "Peso de la bomba: 4400kg\n"+
+    "Potencia: 16 kilotones\n" +
+    "Efectos: Destrucción masiva en Hiroshima, \n"+
+    "~200,000 muertos en pocos meses. \n" +
+    "La radiación causó enfermedades, mutaciones \n"+
+    "genéticas y una gran contaminación.\n"+
+    "Fue uno de los primeros usos de la bomba atómica en \n"+
+    "un conflicto.";
+  if (infoLabel != null) infoLabel.setText(info);
 }
 
 public void Hidrogeno() {
@@ -311,6 +352,21 @@ public void Hidrogeno() {
   radCircleRadius = 13;
   hurtCircleRadius = 20;
   bombType = 2;
+
+  String info = "Bomba de Hidrógeno (\"Mike\")\n" +
+    "Fecha: 1 de noviembre de 1952\n" +
+    "Ubicación: Enewetak atoll en las islas Marshall\n" +
+    "Tipo: Fusión nuclear (Criogénico líquido deuterio)\n" +
+    "Potencia: 10.4 megatones\n" +
+    "Efectos: En su primera fracción de segundo, la explosión\n" +
+    "creó una bola de fuego de un cuarto del tamaño de \n" +
+    "Manhattan. Sólo dos minutos después de la detonación, \n" +
+    "la nube alcanzó una altura de 12,2 kilómetros. En su \n" +
+    "máximo, la nube se extendió a lo largo de 160 kilómetros\n" +
+    "de ancho, a través de la estratosfera y envió una columna \n" +
+    "explosiva de 40 kilómetros, por encima del punto de \n" +
+    "detonación.";
+  if (infoLabel != null) infoLabel.setText(info);
 }
 
 public void TSAR() {
@@ -324,6 +380,21 @@ public void TSAR() {
   radCircleRadius = 30;
   hurtCircleRadius = 50;
   bombType = 3;
+
+  String info = "Tsar Bomba\n" +
+    "Fecha: 30 de octubre de 1961\n" +
+    "Tipo: Fusión nuclear, diseño de tres etapas\n" +
+    "Potencia: ~50 megatones (~3,000 veces Hiroshima)\n" +
+    "Efectos: Onda expansiva que rompió ventanas a 900 km,\n" +
+    "nube de hongo de 60 km de altura. La bomba más \n"+
+    "poderosa probada.";
+  if (infoLabel != null) infoLabel.setText(info);
+}
+
+public void SimularHiroshima() {
+  Hiroshima();
+  theta = 5.489243;
+  phi = 0.91484404;
 }
 
 Explosion triggerExplosion() {
@@ -367,7 +438,6 @@ void keyPressed() {
 
 
     updatePeopleCount(totalP, deadPeople, hurtPeople, radPeople, deadPeoplePB, radPb, hurtPb); // Tot - Dead - Hurt - Rad - deadPB - radPB - hurtPB
-
   }
 }
 
