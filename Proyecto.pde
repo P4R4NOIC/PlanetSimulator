@@ -1,6 +1,8 @@
 
 import peasy.*;
 import controlP5.*;
+
+
 ControlP5 controlP5;
 PImage img;
 PeasyCam cam;
@@ -9,9 +11,11 @@ float radius = 1200;
 PVector[] smallSpheres;
 
 
-float whiteSphereSpeed = 0.02;
+float whiteSphereSpeed = 0.004;
 float theta = 0;
 float phi = HALF_PI;
+
+
 
 float explosionScale;
 float shockwaveSize;
@@ -33,6 +37,7 @@ Cluster C1;
 Cluster C2;
 Esfera c;
 boolean isRunning = true;
+PrintWriter output;
 
 import processing.opengl.*;
 PMatrix3D currCameraMatrix;
@@ -55,7 +60,9 @@ CColor colorTSAR;
 Button botonHiroshima, botonHidrogeno, botonTSAR;
 Group infoGroup;
 Textlabel infoLabel;
+ArrayList<Esfera> esferasEscritura;
 
+FileHandler fileHandlerA = new FileHandler("AasiaVector.txt");
 void bombInfo() {
   controlP5 = new ControlP5(this);
 
@@ -181,11 +188,11 @@ void setup() {
   g3 = (PGraphics3D)g;
   background(0);
   smallSpheres = new PVector[numSpheres];
-
-
+  output = createWriter("PVTEMP.txt");
+  esferasEscritura = new ArrayList<Esfera>();
   String name = "tierra2.jpg";
   img = loadImage(name);
-
+ 
   cam = new PeasyCam(this, 2000);
 
 
@@ -222,7 +229,9 @@ void draw() {
   background(0);
   // lights();
 
-
+  for(Esfera es:esferasEscritura){
+    es.draw();
+  }
   C1.display();
   c.draw();
   for (int i = explosions.size() - 1; i >= 0; i--) {
@@ -322,8 +331,8 @@ public void Hiroshima() {
   explosionScale = 0.25;
   shockwaveSize = 10;
   deadCircleRadius = 2.5;
-  radCircleRadius = 6;
-  hurtCircleRadius = 10;
+  radCircleRadius = 4;
+  hurtCircleRadius = 7;
   bombType = 1;
 
   String info = "Bomba de Hiroshima (\"Little Boy\")\n" +
@@ -349,8 +358,8 @@ public void Hidrogeno() {
   explosionScale = 0.5;
   shockwaveSize = 25;
   deadCircleRadius = 4;
-  radCircleRadius = 13;
-  hurtCircleRadius = 20;
+  radCircleRadius = 10;
+  hurtCircleRadius = 14;
   bombType = 2;
 
   String info = "Bomba de Hidrógeno (\"Mike\")\n" +
@@ -377,8 +386,8 @@ public void TSAR() {
   explosionScale = 1;
   shockwaveSize = 50;
   deadCircleRadius = 10;
-  radCircleRadius = 30;
-  hurtCircleRadius = 50;
+  radCircleRadius = 20;
+  hurtCircleRadius = 35;
   bombType = 3;
 
   String info = "Tsar Bomba\n" +
@@ -397,6 +406,7 @@ public void SimularHiroshima() {
   phi = 0.91484404;
 }
 
+
 Explosion triggerExplosion() {
   // Get the explosion position based on the white sphere position
   float x = radius * sin(phi) * cos(theta);
@@ -404,11 +414,11 @@ Explosion triggerExplosion() {
   float z = radius * cos(phi);
 
 
-  Esfera a = new Esfera(x, y, z, deadCircleRadius, #F70000, 5, null, 200);
+  Esfera a = new Esfera(x, y, z, deadCircleRadius, #F70000, 20, null, 200);
 
-  Esfera b = new Esfera(x, y, z, radCircleRadius, #EEF231, 5, null, 100);
+  Esfera b = new Esfera(x, y, z, radCircleRadius, #EEF231, 20, null, 100);
 
-  Esfera f = new Esfera(x, y, z, hurtCircleRadius, #62F525, 5, null, 100);
+  Esfera f = new Esfera(x, y, z, hurtCircleRadius, #62F525, 20, null, 100);
 
   // Create a new explosion with specified parameters
 
@@ -416,6 +426,15 @@ Explosion triggerExplosion() {
   explosions.add(explosion); // Add the explosion to the list 100 200
 
   return explosion;
+}
+void positionLogic() {
+  float x = radius * sin(phi) * cos(theta);
+  float y = radius * sin(phi) * sin(theta);
+  float z = radius * cos(phi);
+  
+  // Guardar valores en archivos sin cerrar
+ output.println(x + "," + y + "," + z);
+ output.flush();
 }
 
 void keyPressed() {
@@ -438,13 +457,26 @@ void keyPressed() {
 
 
     updatePeopleCount(totalP, deadPeople, hurtPeople, radPeople, deadPeoplePB, radPb, hurtPb); // Tot - Dead - Hurt - Rad - deadPB - radPB - hurtPB
+  }else if(key == 'p') {
+    placeSphere();
+  } else if (key == ESC) {
+    exitSimulation();
   }
 }
 
-void exit() {
-
-  // Llama a la función exit original para cerrar el programa
-  super.exit();
+void placeSphere() {
+  // Colocar una esfera en la posición actual de x, y, z
+  float x = radius * sin(phi) * cos(theta);
+  float y = radius * sin(phi) * sin(theta);
+  float z = radius * cos(phi);
+  Esfera newSphere = new Esfera(x, y, z, 3, #FF0000, 10, null, 255);
+  esferasEscritura.add(newSphere);
+  positionLogic();
+}
+void exitSimulation() {
+     // Guarda los datos pendientes en el archivo
+    output.close();
+    exit();
 }
 
 PVector randomPositionOnSphere(float radius) {
