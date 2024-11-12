@@ -298,7 +298,7 @@ float distanceEffect(float distance, float maxRadius) {
             
             peopleComul cluster = new peopleComul(
               valor1, valor2, valor3, 
-              radius, colorNode, 10, 255, populationPerNode
+              radius, colorNode, 6, 255, populationPerNode
             );
             populationClusters.add(cluster);
             remainingPopulation -= populationPerNode;
