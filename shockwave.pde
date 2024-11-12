@@ -21,6 +21,7 @@ class Shockwave {
     fill(255, 255, 255, lifespan * 0.5); // White with alpha for fading
     pushMatrix();
     translate(position.x, position.y, position.z);
+    sphereDetail(10);
     sphere(radius); // Draw the shockwave as a sphere
     popMatrix();
   }

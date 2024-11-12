@@ -40,6 +40,19 @@ randomizar con una semilla (gacha roberto) la el tamano y la cantidad de poblaci
         this.hurtPoblation=0;
         
     }
+    peopleComul(PVector pos,float d, color c, int detail,float opacity,long poblationN) {
+        this.pos = pos;
+        diameter = d;
+        this.c = c;
+        this.detail = detail;
+        this.opacity = opacity;
+        this.poblationN=poblationN;
+        this.totalPoblationN=poblationN;
+        this.peopleRadiated=0;
+        this.deadPoblation=0;
+        this.hurtPoblation=0;
+        
+    }
 
     void draw() {
         noStroke();
