@@ -11,7 +11,9 @@ float radius = 1200;
 PVector[] smallSpheres;
 
 
-float whiteSphereSpeed = 0.006;
+float whiteSphereSpeed = 0.01;
+int speedText = 1;
+
 float theta = 0;
 float phi = HALF_PI;
 
@@ -43,23 +45,16 @@ import processing.opengl.*;
 PMatrix3D currCameraMatrix;
 PGraphics3D g3;
 
-Textlabel totalPeople;
-Textlabel totalDeadPeople;
-Textlabel totalRadiatedPeople;
-Textlabel totalHurtPeople;
-
-Textlabel deadPeoplePerBomb;
-Textlabel radPeoplePerBomb;
-Textlabel hurtPeoplePerBomb;
+Textlabel totalPeople, totalDeadPeople, totalRadiatedPeople, totalHurtPeople, deadPeoplePerBomb, radPeoplePerBomb, hurtPeoplePerBomb, infoLabel, speedLabel;
 
 CColor colorPrincipal;
 CColor colorHiroshima;
 CColor colorHidrogeno;
 CColor colorTSAR;
 
-Button botonHiroshima, botonHidrogeno, botonTSAR;
+Button botonHiroshima, botonHidrogeno, botonTSAR, botonSimHiro, incSpd, decSpd,botonSimGuerra;
 Group infoGroup;
-Textlabel infoLabel;
+
 ArrayList<Esfera> esferasEscritura;
 
 FileHandler fileHandlerA = new FileHandler("AasiaVector.txt");
@@ -156,9 +151,16 @@ void bombInfo() {
     .setColor(colorPrincipal);
 
   // Botón Simulacion Hiroshima
-  botonTSAR = controlP5.addButton("SimularHiroshima")
+  botonSimHiro = controlP5.addButton("SimularHiroshima")
     .setValue(0)
     .setPosition(400, height - 100)
+    .setSize(80, 50)
+    .setColor(colorPrincipal);
+
+  // Botón Simulacion GuerraMundial
+  botonSimGuerra = controlP5.addButton("SimGuerraMundial")
+    .setValue(0)
+    .setPosition(500, height - 100)
     .setSize(80, 50)
     .setColor(colorPrincipal);
 
@@ -178,6 +180,24 @@ void bombInfo() {
     .setFont(createFont("Georgia", 15))
     .setGroup(infoGroup);
 
+  incSpd = controlP5.addButton("incSpd")
+    .setValue(0)
+    .setPosition(300, height - 200)
+    .setSize(80, 50)
+    .setColor(colorPrincipal);
+
+  speedLabel = controlP5.addTextlabel("speedLabel")
+    .setText("Vel: 1")
+    .setPosition(200, height - 200)
+    .setColorValue(#FFFFFF)
+    .setSize(300, 30)
+    .setFont(createFont("Georgia", 30));
+
+  decSpd = controlP5.addButton("decSpd")
+    .setValue(0)
+    .setPosition(100, height - 200)
+    .setSize(80, 50)
+    .setColor(colorPrincipal);
 
   controlP5.setAutoDraw(false);
 }
@@ -192,7 +212,7 @@ void setup() {
   esferasEscritura = new ArrayList<Esfera>();
   String name = "tierra2.jpg";
   img = loadImage(name);
- 
+
   cam = new PeasyCam(this, 2000);
 
 
@@ -229,7 +249,7 @@ void draw() {
   background(0);
   // lights();
 
-  for(Esfera es:esferasEscritura){
+  for (Esfera es : esferasEscritura) {
     es.draw();
   }
   C1.display();
@@ -406,6 +426,32 @@ public void SimularHiroshima() {
   phi = 0.91484404;
 }
 
+public void SimularGuerraMundial() {
+  
+}
+
+public void incSpd() {
+  String newText;
+  if (speedText<5) {
+    whiteSphereSpeed+=0.01;
+    speedText++;
+  }
+  newText = "Vel: " + speedText;
+  if (speedLabel != null)speedLabel.setText(newText);
+}
+
+public void decSpd() {
+  String newText;
+  if (speedText>1) {
+    whiteSphereSpeed-=0.01;
+    speedText--;
+  }
+  newText = "Vel: " + speedText;
+  if (speedLabel != null)speedLabel.setText(newText);
+}
+
+
+
 
 Explosion triggerExplosion() {
   // Get the explosion position based on the white sphere position
@@ -431,10 +477,10 @@ void positionLogic() {
   float x = radius * sin(phi) * cos(theta);
   float y = radius * sin(phi) * sin(theta);
   float z = radius * cos(phi);
-  
+
   // Guardar valores en archivos sin cerrar
- output.println(x + "," + y + "," + z);
- output.flush();
+  output.println(x + "," + y + "," + z);
+  output.flush();
 }
 
 void keyPressed() {
@@ -457,7 +503,7 @@ void keyPressed() {
 
 
     updatePeopleCount(totalP, deadPeople, hurtPeople, radPeople, deadPeoplePB, radPb, hurtPb); // Tot - Dead - Hurt - Rad - deadPB - radPB - hurtPB
-  }else if(key == 'p') {
+  } else if (key == 'p') {
     placeSphere();
   } else if (key == ESC) {
     exitSimulation();
@@ -474,9 +520,9 @@ void placeSphere() {
   positionLogic();
 }
 void exitSimulation() {
-     // Guarda los datos pendientes en el archivo
-    output.close();
-    exit();
+  // Guarda los datos pendientes en el archivo
+  output.close();
+  exit();
 }
 
 PVector randomPositionOnSphere(float radius) {
