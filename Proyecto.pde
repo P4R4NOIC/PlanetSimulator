@@ -11,7 +11,7 @@ float radius = 1200;
 PVector[] smallSpheres;
 
 
-float whiteSphereSpeed = 0.004;
+float whiteSphereSpeed = 0.006;
 float theta = 0;
 float phi = HALF_PI;
 
