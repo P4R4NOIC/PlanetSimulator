@@ -236,7 +236,7 @@ float distanceEffect(float distance, float maxRadius) {
     
     float maxRadius =3;
 
-    randomSeed(123);
+    randomSeed(16);
     
     String files[] = {"AsiaPVector.txt","OceaniaPVector.txt","AmericaPVector.txt","EUPVector.txt","AfricaPVector.txt"};
     
