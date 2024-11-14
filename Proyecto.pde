@@ -82,14 +82,14 @@ void bombInfo() {
 
   totalRadiatedPeople = controlP5.addTextlabel("totalRadiatedPeopleLabel")
     .setText("Total de personas irradiadas: 0")
-    .setPosition(10, 90)
+    .setPosition(10, 130)
     .setColorValue(#39FF14)
     .setFont(createFont("Georgia", 40))
     .setSize(200, 40);
 
   totalHurtPeople = controlP5.addTextlabel("totalHurtPeopleLabel")
     .setText("Total de personas heridas: 0")
-    .setPosition(10, 130)
+    .setPosition(10, 90)
     .setColorValue(#FFD700)
     .setFont(createFont("Georgia", 40))
     .setSize(200, 40);
@@ -104,14 +104,14 @@ void bombInfo() {
 
   radPeoplePerBomb = controlP5.addTextlabel("radPeoplePerBombLabel")
     .setText("Personas irradiadas por la bomba individual: 0")
-    .setPosition(10, 220)
+    .setPosition(10, 260)
     .setColorValue(#3CB371)
     .setFont(createFont("Georgia", 27))
     .setSize(300, 30);
 
   hurtPeoplePerBomb = controlP5.addTextlabel("hurtPeoplePerBombLabel")
     .setText("Personas heridas por la bomba individual: 0")
-    .setPosition(10, 260)
+    .setPosition(10, 220)
     .setColorValue(#DAA520)
     .setFont(createFont("Georgia", 27))
     .setSize(300, 30);
