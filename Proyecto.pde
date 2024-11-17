@@ -11,10 +11,16 @@ float radius = 1200;
 PVector[] smallSpheres;
 
 
-float whiteSphereSpeed = 0.006;
+float whiteSphereSpeed = 0.005;
+int speedText = 1;
+
 float theta = 0;
 float phi = HALF_PI;
 
+int flagNW=0;
+int bombCount=0;
+ArrayList<Explosion> nuclearExplosions;
+ArrayList<Explosion> threeBombs;
 
 
 float explosionScale;
@@ -43,23 +49,16 @@ import processing.opengl.*;
 PMatrix3D currCameraMatrix;
 PGraphics3D g3;
 
-Textlabel totalPeople;
-Textlabel totalDeadPeople;
-Textlabel totalRadiatedPeople;
-Textlabel totalHurtPeople;
-
-Textlabel deadPeoplePerBomb;
-Textlabel radPeoplePerBomb;
-Textlabel hurtPeoplePerBomb;
+Textlabel totalPeople, totalDeadPeople, totalRadiatedPeople, totalHurtPeople, deadPeoplePerBomb, radPeoplePerBomb, hurtPeoplePerBomb, infoLabel, speedLabel;
 
 CColor colorPrincipal;
 CColor colorHiroshima;
 CColor colorHidrogeno;
 CColor colorTSAR;
 
-Button botonHiroshima, botonHidrogeno, botonTSAR;
+Button botonHiroshima, botonHidrogeno, botonTSAR, botonSimHiro, incSpd, decSpd,botonSimGuerra;
 Group infoGroup;
-Textlabel infoLabel;
+
 ArrayList<Esfera> esferasEscritura;
 
 FileHandler fileHandlerA = new FileHandler("AasiaVector.txt");
@@ -83,14 +82,14 @@ void bombInfo() {
 
   totalRadiatedPeople = controlP5.addTextlabel("totalRadiatedPeopleLabel")
     .setText("Total de personas irradiadas: 0")
-    .setPosition(10, 90)
+    .setPosition(10, 130)
     .setColorValue(#39FF14)
     .setFont(createFont("Georgia", 40))
     .setSize(200, 40);
 
   totalHurtPeople = controlP5.addTextlabel("totalHurtPeopleLabel")
     .setText("Total de personas heridas: 0")
-    .setPosition(10, 130)
+    .setPosition(10, 90)
     .setColorValue(#FFD700)
     .setFont(createFont("Georgia", 40))
     .setSize(200, 40);
@@ -105,14 +104,14 @@ void bombInfo() {
 
   radPeoplePerBomb = controlP5.addTextlabel("radPeoplePerBombLabel")
     .setText("Personas irradiadas por la bomba individual: 0")
-    .setPosition(10, 220)
+    .setPosition(10, 260)
     .setColorValue(#3CB371)
     .setFont(createFont("Georgia", 27))
     .setSize(300, 30);
 
   hurtPeoplePerBomb = controlP5.addTextlabel("hurtPeoplePerBombLabel")
     .setText("Personas heridas por la bomba individual: 0")
-    .setPosition(10, 260)
+    .setPosition(10, 220)
     .setColorValue(#DAA520)
     .setFont(createFont("Georgia", 27))
     .setSize(300, 30);
@@ -156,9 +155,16 @@ void bombInfo() {
     .setColor(colorPrincipal);
 
   // Botón Simulacion Hiroshima
-  botonTSAR = controlP5.addButton("SimularHiroshima")
+  botonSimHiro = controlP5.addButton("SimularHiroshima")
     .setValue(0)
     .setPosition(400, height - 100)
+    .setSize(80, 50)
+    .setColor(colorPrincipal);
+
+  // Botón Simulacion GuerraMundial
+  botonSimGuerra = controlP5.addButton("SimGuerraMundial")
+    .setValue(0)
+    .setPosition(500, height - 100)
     .setSize(80, 50)
     .setColor(colorPrincipal);
 
@@ -178,6 +184,24 @@ void bombInfo() {
     .setFont(createFont("Georgia", 15))
     .setGroup(infoGroup);
 
+  incSpd = controlP5.addButton("incSpd")
+    .setValue(0)
+    .setPosition(300, height - 200)
+    .setSize(80, 50)
+    .setColor(colorPrincipal);
+
+  speedLabel = controlP5.addTextlabel("speedLabel")
+    .setText("Vel: 1")
+    .setPosition(200, height - 200)
+    .setColorValue(#FFFFFF)
+    .setSize(300, 30)
+    .setFont(createFont("Georgia", 30));
+
+  decSpd = controlP5.addButton("decSpd")
+    .setValue(0)
+    .setPosition(100, height - 200)
+    .setSize(80, 50)
+    .setColor(colorPrincipal);
 
   controlP5.setAutoDraw(false);
 }
@@ -192,13 +216,13 @@ void setup() {
   esferasEscritura = new ArrayList<Esfera>();
   String name = "tierra2.jpg";
   img = loadImage(name);
- 
+
   cam = new PeasyCam(this, 2000);
 
 
   cam.setMinimumDistance(1500);
   cam.setMaximumDistance(2500);
-
+  randomSeed(1234);
 
 
 
@@ -220,16 +244,19 @@ void setup() {
   c.generatePopulationClusters();
   bombInfo();
   Hiroshima();
+  
   explosions = new ArrayList<Explosion>();
+  threeBombs = new ArrayList<Explosion>();
   theta = 0;
   phi = HALF_PI;
+  flagNW=0;
 }
 
 void draw() {
   background(0);
   // lights();
 
-  for(Esfera es:esferasEscritura){
+  for (Esfera es : esferasEscritura) {
     es.draw();
   }
   C1.display();
@@ -247,6 +274,38 @@ void draw() {
       exp.drawDead();
       exp.drawRad();
       exp.drawHurt();
+    }
+  }
+  if(flagNW==1){
+    if(threeBombs.size()==0 && nuclearExplosions.size()==0){
+      flagNW=0;
+    }else{
+      if(nuclearExplosions.size()>0){
+        while(bombCount<10){
+          int indexRand = (int)random(0, nuclearExplosions.size()-1);
+          threeBombs.add(nuclearExplosions.get(indexRand));
+          nuclearExplosions.remove(indexRand);
+          bombCount++; 
+        }
+      }
+      for (int i = threeBombs.size() - 1; i >= 0; i--) {
+        Explosion exp = threeBombs.get(i);
+        exp.draw(); // Call the draw method of Explosion
+        if (exp.isComplete()) {
+           explosions.add(exp);
+           threeBombs.remove(i);
+           bombCount--;
+           c.lookForAfectedPeople(exp);
+          long deadPeoplePB = c.getDeadPeoplePerBomb();
+          long deadPeople = c.getTotalDeadPeople();
+          long hurtPeople =c.getTotalHurtPoblation();
+          long radPeople = c.getTotalRadiatedPoblation();
+          long radPb =c.getIrraditedPeoplePerBomb();
+          long hurtPb = c.getHurtPeoplePerBomb();
+          long totalP=c.getTotalAlivePeople();
+          updatePeopleCount(totalP, deadPeople, hurtPeople, radPeople, deadPeoplePB, radPb, hurtPb); 
+         }
+      }
     }
   }
 
@@ -407,8 +466,92 @@ public void SimularHiroshima() {
 }
 
 
+BufferedReader reader;
+public void SimGuerraMundial() {
+   if (nuclearExplosions == null) {
+    nuclearExplosions = new ArrayList<Explosion>();
+  }
+  reader = createReader("nuclearWarCoordenates.txt");
+  String linea="no";
+  println("AQUI");
+  try{
+     while ((linea = reader.readLine()) != null) {
+            String[] valores = linea.split(",");
+            float deadCircleRadiusN = 0;
+            float radCircleRadiusN = 0;
+            float hurtCircleRadiusN = 0;
+            float shockwaveSizeN =0;
+            float explosionScaleN = 0;
+            int bombTypeN =0;
+            int chooseBomb =int(random(100));
+            if (chooseBomb < 50) {
+                explosionScaleN = 1;
+                shockwaveSizeN = 50;
+                deadCircleRadiusN = 10;
+                radCircleRadiusN = 20;
+                hurtCircleRadiusN = 35;
+                bombTypeN = 3;
+            } else if (chooseBomb < 90) {
+                explosionScaleN = 0.5;
+                shockwaveSizeN = 25;
+                deadCircleRadiusN = 4;
+                radCircleRadiusN = 10;
+                hurtCircleRadiusN = 14;
+                bombTypeN = 2;
+            } else {
+                explosionScaleN = 0.25;
+                shockwaveSizeN = 10;
+                deadCircleRadiusN = 2.5;
+                radCircleRadiusN = 4;
+                hurtCircleRadiusN = 7;
+                bombTypeN = 1;
+            }
+            // Convertir los valores a flotantes
+            float valor1 = float(valores[0]);
+            float valor2 = float(valores[1]);
+            float valor3 = float(valores[2]);
+            Esfera a = new Esfera(valor1, valor2, valor3, deadCircleRadiusN, #F70000, 20, null, 200);
+            Esfera b = new Esfera(valor1, valor2, valor3, radCircleRadiusN, #EEF231, 20, null, 100);
+            Esfera f = new Esfera(valor1, valor2, valor3, hurtCircleRadiusN, #62F525, 20, null, 100);
+            
+            Explosion explosion = new Explosion(valor1, valor2, valor3, 500, 600, explosionScaleN, shockwaveSizeN, a, b, f, bombTypeN); // Customize parameters
+            nuclearExplosions.add(explosion);
+            
+    }
+    reader.close();
+    flagNW=1;
+    
+  }catch (IOException e) {
+        println("Error al leer el archivo: " + e.getMessage());
+ }
+}
+
+public void incSpd() {
+  String newText;
+  if (speedText<5) {
+    whiteSphereSpeed+=0.01;
+    speedText++;
+  }
+  newText = "Vel: " + speedText;
+  if (speedLabel != null)speedLabel.setText(newText);
+}
+
+public void decSpd() {
+  String newText;
+  if (speedText>1) {
+    whiteSphereSpeed-=0.01;
+    speedText--;
+  }
+  newText = "Vel: " + speedText;
+  if (speedLabel != null)speedLabel.setText(newText);
+}
+
+
+
+
 Explosion triggerExplosion() {
   // Get the explosion position based on the white sphere position
+  bombCount++;
   float x = radius * sin(phi) * cos(theta);
   float y = radius * sin(phi) * sin(theta);
   float z = radius * cos(phi);
@@ -431,10 +574,10 @@ void positionLogic() {
   float x = radius * sin(phi) * cos(theta);
   float y = radius * sin(phi) * sin(theta);
   float z = radius * cos(phi);
-  
+
   // Guardar valores en archivos sin cerrar
- output.println(x + "," + y + "," + z);
- output.flush();
+  output.println(x + "," + y + "," + z);
+  output.flush();
 }
 
 void keyPressed() {
@@ -457,7 +600,7 @@ void keyPressed() {
 
 
     updatePeopleCount(totalP, deadPeople, hurtPeople, radPeople, deadPeoplePB, radPb, hurtPb); // Tot - Dead - Hurt - Rad - deadPB - radPB - hurtPB
-  }else if(key == 'p') {
+  } else if (key == 'p') {
     placeSphere();
   } else if (key == ESC) {
     exitSimulation();
@@ -474,9 +617,9 @@ void placeSphere() {
   positionLogic();
 }
 void exitSimulation() {
-     // Guarda los datos pendientes en el archivo
-    output.close();
-    exit();
+  // Guarda los datos pendientes en el archivo
+  output.close();
+  exit();
 }
 
 PVector randomPositionOnSphere(float radius) {
