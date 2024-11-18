@@ -28,7 +28,7 @@ class Particle {
     } else {
       fill(100, 100, 100, 150);   // Dark grey for dissipating smoke with less transparency
     }
-    sphereDetail(6);
+
     pushMatrix();
     translate(position.x, position.y, position.z);
     sphere(size);  // Size of each particle based on its type
